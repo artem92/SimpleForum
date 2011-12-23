@@ -1,0 +1,34 @@
+"General"
+{
+"ProjectType" = "local"
+"AutoLoadTemplate" = "%s.php;class.%s.php;"
+"IncludeDirs" = ""
+}
+"Configurations"
+{
+    "Local|PHP 5.3"
+    {
+    }
+    "Staging|PHP 5.3"
+    {
+    }
+    "Production|PHP 5.3"
+    {
+    }
+}
+"Files"
+{
+    "index.php"
+    {
+    "ProjRelPath" = "T"
+    }
+}
+"ProjStartupServices"
+{
+}
+"Globals"
+{
+}
+"References"
+{
+}
