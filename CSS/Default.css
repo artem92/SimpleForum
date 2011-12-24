@@ -1,0 +1,50 @@
+/* CSS Document */
+.document
+{
+	margin-left:0%;
+	width:100%;
+}
+.header {
+	height: 100px;
+	width: 100%;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:both;
+}
+
+.bottom {
+	width: 100%;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:both;
+}
+.menu_left {
+	float:left;
+	height: 400px;
+	width:20%;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:left;
+}
+.menu_right {
+	float:left;
+	height: 400px;
+	width:20%;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:right;
+}
+.content {
+	float:left;
+	height: 400px;
+	width: 60%;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+}
+
+

@@ -1,0 +1,66 @@
+/* CSS Document */
+.document
+{
+	margin-left:5%;
+	width:1050px;
+}
+.header {
+	height: 100px;
+	width: 1000px;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:both;
+	margin-bottom:5px;
+}
+
+.bottom {
+	width: 1000px;
+	padding:10px;
+	border-style:none;
+	border-radius:10px;
+	clear:both;
+	margin-left:5%;
+}
+.menu_left {
+	float:left;
+	height: 400px;
+	width:200px;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:left;
+	margin-right:5px;
+	
+}
+.menu_right {
+	float:left;
+	height: 300px;
+	width:200px;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:right;
+	margin-left:5px;
+	margin-bottom:5px;
+}
+.content {
+	float:left;
+	height: 400px;
+	width: 538px;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+}
+
+.login_window {
+	text-align:center;
+	height: 150px;
+	width:300px;
+	padding:10px;
+	border-style:groove;
+	border-radius:10px;
+	clear:right;
+	margin:10px
+}
+
