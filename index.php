@@ -1,7 +1,7 @@
 <?php
-header('Refresh: 3; URL=http://simpleforum/login.php');
-echo 'You will be redirected to login page in 3 sec...';
-exit;
+//header('Refresh: 3; URL=http://simpleforum/login.php');
+//echo 'You will be redirected to login page in 3 sec...';
+//exit;
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -36,8 +36,6 @@ exit;
 <div class="bottom">
 Hello world
 </div> 	
-        
-
 
 </body>
 </html>
