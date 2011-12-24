@@ -18,6 +18,14 @@
 }
 "Files"
 {
+    "CSS"
+    {
+    "ProjRelPath" = "T"
+    }
+    "CSS\\Default.css"
+    {
+    "ProjRelPath" = "T"
+    }
     "index.php"
     {
     "ProjRelPath" = "T"

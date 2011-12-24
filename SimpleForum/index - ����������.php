@@ -6,28 +6,42 @@
 <link href="CSS/Default.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<table width="90%" border="1" align="center">
+  <tr>
+    <td colspan="3"> <!--Headers -->
     	
-       <div> <div class="header">
+        <div class="header">
     	 Hello world
         </div>
-		
-        <div>    
-        <div class="menu_left">
+    </td>
+  </tr>
+  <tr>
+    <td width="250"> <!--Menu -->
+    	
+        <div class="menu">
     	 Hello world
         </div>
-  
+    </td>
+    <td> <!--Main Content -->
     	<div class="content">
     	 Hello world
         </div>
-   
-    	<div class="menu_right">
+    </td>
+    <td width = "250"> <!-- Right Block -->
+    	<div class="menu">
     	 Hello world
         </div>
-    	</div>
-    	</div>
-        <div class="bottom">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3"> <!--Down ender -->
+    	<div class="header">
     	 Hello world
         </div>
+    </td>
+  </tr>
+</table>
+
 
 
 </body>
