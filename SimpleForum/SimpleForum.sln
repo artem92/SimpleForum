@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{1863889A-00DF-4350-BA39-669CA949CB81}") = "SimpleForum", "SimpleForum.phpproj", "{342702A0-8CAB-42C6-B08A-839CE859B4AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Local|PHP 5.3 = Local|PHP 5.3
+		Production|PHP 5.3 = Production|PHP 5.3
+		Staging|PHP 5.3 = Staging|PHP 5.3
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{342702A0-8CAB-42C6-B08A-839CE859B4AA}.Local|PHP 5.3.ActiveCfg = Local|PHP 5.3
+		{342702A0-8CAB-42C6-B08A-839CE859B4AA}.Local|PHP 5.3.Deploy.0 = Local|PHP 5.3
+		{342702A0-8CAB-42C6-B08A-839CE859B4AA}.Production|PHP 5.3.ActiveCfg = Production|PHP 5.3
+		{342702A0-8CAB-42C6-B08A-839CE859B4AA}.Production|PHP 5.3.Deploy.0 = Production|PHP 5.3
+		{342702A0-8CAB-42C6-B08A-839CE859B4AA}.Staging|PHP 5.3.ActiveCfg = Staging|PHP 5.3
+		{342702A0-8CAB-42C6-B08A-839CE859B4AA}.Staging|PHP 5.3.Deploy.0 = Staging|PHP 5.3
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
