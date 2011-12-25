@@ -9,47 +9,43 @@ if (get_user_id($_POST['login'], $_POST['password'])==-1 and !guest_access)
 	exit;
 }
 else 
-{
 	$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
-}
 ?>
-
+<!-- header -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SimpleForum</TITLE>
-<link href="CSS/Const.css" rel="stylesheet" type="text/css">
-<!-- <link href="CSS/New.css" rel="stylesheet" type="text/css"> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>SimpleForum</TITLE>
+     <link href="CSS/Default.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    	
-<div class="document">      
-<div class="header">
- Hello world
+<div style="width:90%; margin-left:5%; ">
+    <div >
+    <? show_header(); ?>
+    </div>
+    <div class="document" >
+        <div class="left-column">
+            <!-- Place your left column content here-->
+            <? show_left_menu(); ?>
+        </div>
+        <div class="right-column">
+           <!-- Place your right column content here-->
+           <? show_login_window(); ?>
+        </div>
+        <div class="center-column">
+      		<!-- Place your center column content here-->
+            <?
+			show_message(1);
+			?>
+    	</div>
+    </div>
+    <div style="clear:both"></div> 
+    <div>
+    <? show_bottom(); ?>
+    </div>
 </div>
 
-
-    <div class="menu_left">
-     Hello world
-</div>
-<div>
-    <div class="content">
-    Session_ID:
-     <? echo $_SESSION['user_id']; ?>
-    
-    </div>
-    </div>
-<div class="menu_right">
-     <? require "login.inc" ?>
-    </div>
- 
-
-
-</div>   
-<div class="bottom">
-Hello world
-</div> 	
 
 </body>
 </html>

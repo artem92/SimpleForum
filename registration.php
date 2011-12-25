@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <?	
 	require('/tools/oracle.conf');
 ?>
@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>SimpleForum User Registration</TITLE>
-<link href="CSS/Const.css" rel="stylesheet" type="text/css">
+<link href="CSS/Default.css" rel="stylesheet" type="text/css">
 </head>
 <body>   	
 <div class="document">      
@@ -83,9 +83,7 @@
 	?>
 	</form>
     </div>
-	<div class="menu_right">
-     Hello world
-    </div>
+        </div>
 </div>   
 
 
