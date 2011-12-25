@@ -1,8 +1,9 @@
 <?php
 	//constants for connection to oracle DB
-	require "/tools/oracle.conf.php";
+	require "";
 ?>
-			
+
+ 		
 <html>
 	<head>
 		<title> Lab work 7 </title>
