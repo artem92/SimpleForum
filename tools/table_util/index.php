@@ -114,7 +114,7 @@
 			
 			
 		?>
-		<form action = '/change_table.php' align = 'center' method = 'POST'>
+		<form action = 'tools/table_util/change_table.php' align = 'center' method = 'POST'>
 			<h3> Or select the table to work with it </h3>
 			<select name = 'table'>
 			<?php
