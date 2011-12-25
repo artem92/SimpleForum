@@ -64,3 +64,21 @@
 	margin:10px
 }
 
+.post
+{
+	border-style:groove;
+	border-radius:5px;
+	clear:right;
+}
+.post-header
+{
+	padding-left:5px;
+	padding-top:5px;
+	padding-right:5px;
+}
+
+.post-content
+{
+	padding:5px;
+}
+

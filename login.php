@@ -1,17 +1,3 @@
-<?php session_start();
-require("/tools/oracle_connect.php");
-$conn = oracle_connect();
-if (isset($_POST['login']) && isset($_POST['password']))
-{
-	$login = $_POST['login'];
-    $password = $_POST['password'];
-	$query = "SELECT id
-            FROM users
-            WHERE login='".$login."' AND password='".$password."'";
-	$st = oci_parse($conn, $query);
-	oci_execute($st);
-}
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,7 +11,7 @@ if (isset($_POST['login']) && isset($_POST['password']))
 <div class="login_window" align="center">
 	Please login with your login and password:
     <hr />
-	<form action="" method="post">
+	<form action="/index.php" method="post">
     <table width="270">
     <tr>
     <td align="left">Login: </td>
@@ -51,19 +37,7 @@ if (isset($_POST['login']) && isset($_POST['password']))
      	</tr>
         <tr>
         <td colspan="2">
-        <?
-		if (isset($_POST['login']) && isset($_POST['password'])) 
-		if ($row = oci_fetch_assoc($st)) 
-		{
-			$_SESSION['user_id'] = $row['id'];
-			echo '<meta http-equiv="refresh" content="0; url=/index.php">';
-		}	
-		else 
-		{
-			echo('Login/Password not found. Try again...');
-			//echo '<meta http-equiv="refresh" content="3; url=/login.php">';
-		}
-		?>
+       
         </td>
      
      </table>
@@ -72,10 +46,3 @@ if (isset($_POST['login']) && isset($_POST['password']))
 </center>
 </body>
 </html>
-
-
-
-
-
-
-

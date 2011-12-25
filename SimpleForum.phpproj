@@ -2,17 +2,17 @@
 {
 "ProjectType" = "local"
 "AutoLoadTemplate" = "%s.php;class.%s.php;"
-"IncludeDirs" = ""
+"IncludeDirs" = "D:\\System\\Denwer\\home;"
 }
 "Configurations"
 {
-    "Local|PHP 5.3"
+    "Local|PHP 5.2"
     {
     }
-    "Staging|PHP 5.3"
+    "Staging|PHP 5.2"
     {
     }
-    "Production|PHP 5.3"
+    "Production|PHP 5.2"
     {
     }
 }
@@ -22,7 +22,7 @@
     {
     "ProjRelPath" = "T"
     }
-    ".httpd.conf"
+    ".vsphpignore"
     {
     "ProjRelPath" = "T"
     }
@@ -30,11 +30,27 @@
     {
     "ProjRelPath" = "T"
     }
+    "CSS\\Const.css"
+    {
+    "ProjRelPath" = "T"
+    }
     "CSS\\Default.css"
     {
     "ProjRelPath" = "T"
     }
+    "CSS\\New.css"
+    {
+    "ProjRelPath" = "T"
+    }
     "desktop.ini"
+    {
+    "ProjRelPath" = "T"
+    }
+    "engine.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "forum.config"
     {
     "ProjRelPath" = "T"
     }
@@ -50,7 +66,11 @@
     {
     "ProjRelPath" = "T"
     }
-    "php.ini"
+    "login_check.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "php.ini.back"
     {
     "ProjRelPath" = "T"
     }
@@ -70,7 +90,15 @@
     {
     "ProjRelPath" = "T"
     }
-    "tools\\oracle_connect.php"
+    "tools\\oracle.conf"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\oracle_utils.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\path.conf"
     {
     "ProjRelPath" = "T"
     }
