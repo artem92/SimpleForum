@@ -1,3 +1,8 @@
+<?
+	require '../path.conf.php';
+	require('oracle_functions.php');
+?>
+
 <html>
 	<head>
 		<link rel=StyleSheet href="style.css" type = "text/css" media=screen>
@@ -29,7 +34,6 @@
 	</head>
 	<body>
 		<?php
-			require('oracle_functions.php');
 			$table = $_POST['table'];
 			//echo $table;
 			if (isset($table))
@@ -61,7 +65,7 @@
 					//echo 'succesfully connected to orcl!';
 					//OCILogoff($c);
 					
-					echo '<a href = "index.php"><----- Come Back</a>';
+					echo '<a href = "'.table_util_path.'index.php"><----- Come Back</a>';
 					echo '<h2 align = "center">Work with table '.$table.'</h2>';
 					
 					$foreign_keys = get_foreign_keys($c,$table,$username);

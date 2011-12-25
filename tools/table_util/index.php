@@ -1,9 +1,9 @@
 <?php
 	//constants for connection to oracle DB
-	require "";
+	require '../oracle.conf';
+	require '../path.conf.php';
 ?>
-
- 		
+			
 <html>
 	<head>
 		<title> Lab work 7 </title>
@@ -111,7 +111,7 @@
 			
 			
 		?>
-		<form action = '/change_table.php' align = 'center' method = 'POST'>
+		<form action = <? echo table_util_path.'change_table.php' ?> align = 'center' method = 'POST'>
 			<h3> Or select the table to work with it </h3>
 			<select name = 'table'>
 			<?php
