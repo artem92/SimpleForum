@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <?	
 	require('/tools/oracle.conf');
+	require('engine.php');
 ?>
 <html>
 <head>
@@ -12,22 +13,27 @@
 <div class="document">      
 
 <div class="header">
- Hello world
+ <center><h2>Simple forum registration</h2></center>
 </div>
     <div class="menu_left">
      Hello world
 	</div>
 
     <div class="content">
-	<? if ((!isset($_POST['lets_submit']))||(!((isset($_POST['username']))&&(isset($_POST['password']))))) {?>
-    <h4>Welcome to the SimpleForum registration page!
-    Here you can register your account. Please enter your username and password in the fields below:</h4>
-	<br />
-    <form action="<? echo $_SERVER['PHP_SELF'] ?>" method="post">
+	<? 
+		$is_set = false;
+		if (isset($_POST['username'])) {$usrnm = $_POST['username'];}
+		else $usrnm = '';
+		if (isset($_POST['info'])) {$info = $_POST['info'];}
+		else $info = '';
+		$s = '<h3>Welcome to the SimpleForum registration page! To register, enter your username and password in the fields below:</h3>
+		<h4>(Note that all symbols in your username should be latin, number or underscore("_") in any sequence)</h4>
+		<br />
+		<form action="'.$_SERVER['PHP_SELF'].'" method="post">
     	<table border="0">
           <tr>
             <td>Username: </td>
-            <td><input name="username" type="text" size="20"></td>
+            <td><input name="username" type="text" size="20" value = "'.$usrnm.'"></td>
           </tr>
           <tr>
             <td>Password:</td>
@@ -35,18 +41,22 @@
           </tr>
 		   <tr>
             <td>Your personal information*:</td>
-            <td><textarea rows = '10' cols = '40' name = 'info' class = "textarea"></textarea> </td>
+            <td><textarea rows = "10" cols = "40" name = "info" class = "textarea">'.$info.'</textarea> </td>
           </tr>
         </table>
 		(Fields, marked with "*", are not necessary to fill)
 		<br /><br />
 		<input type = "hidden" value = "1" name = "lets_submit">
-		<input type = "submit" value = "Send registration request" class="button">
-	<? }
-		else  if ((isset($_POST['username'],$_POST['password']))&&(!empty($_POST['username']))&&(!empty($_POST['password']))) 
+		<input type = "submit" value = "Send registration request" class="button">';
+		if (isset($_POST['lets_submit'])) $s = $s.'<br /><br />
+		<font size = "3" color = "red">Please, fill in the necessary fields correctly</font>'; 
+		
+		if (!is_valid_usrnm_or_pw(array($_POST['username'],$_POST['password']))) echo $s;
+		
+		else //actual registration - put user to the DB
 		{	
-			echo 'username: \''.$_POST['username'].'\' <br />';
-			echo 'password: \''.$_POST['password'].'\'';
+			//echo 'username: \''.$_POST['username'].'\' <br />';
+			//echo 'password: \''.$_POST['password'].'\'';
 			PutEnv('ORACLE_SID = XE');
 			PutEnv('ORACLE_HOME = '.ora_home);
 			PutEnv('TNS_ADMIN = '.tns_admin);
@@ -63,7 +73,8 @@
 				if ($r)
 				{
 					//success
-					echo '<h3>You registered successfully!</h3>';
+					echo '<h3>You registered successfully!</h3>
+					<a href="/index.php"></a>';
 				}
 				else 
 				{
