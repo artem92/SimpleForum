@@ -46,7 +46,7 @@
 }
 .content {
 	float:left;
-	height: 400px;
+	/*height: auto;*/
 	width: 538px;
 	padding:10px;
 	border-style:groove;
@@ -63,6 +63,14 @@
 	clear:right;
 	margin:10px
 }
+.button {
+	width: 17em;
+	height: 3em;
+}
+.textarea{
+	resize: none;
+}
+
 
 .post
 {
