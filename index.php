@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 //header('Refresh: 3; URL=http://simpleforum/login.php');
 //echo 'You will be redirected to login page in 3 sec...';
 //exit;
@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>SimpleForum</TITLE>
 <link href="CSS/Const.css" rel="stylesheet" type="text/css">
+<!-- <link href="CSS/New.css" rel="stylesheet" type="text/css"> -->
 </head>
 <body>
     	
@@ -27,7 +28,7 @@
      Hello world
     </div>
 <div class="menu_right">
-     Hello world
+     <? require "login.inc" ?>
     </div>
  
 

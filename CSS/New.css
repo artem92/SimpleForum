@@ -1,0 +1,571 @@
+body {
+    background: none repeat scroll 0 0 white;
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+table {
+    width: 100%;
+}
+table td {
+    border-width: 0;
+    font-family: Georgia,Verdana,Arial,Helvetica,sans-serif;
+    padding: 0;
+    vertical-align: top;
+}
+a {
+    background-color: transparent;
+    color: #000066;
+    font-weight: bold;
+    text-decoration: none;
+}
+a:hover {
+    color: #CC0000;
+}
+h1 {
+    font-size: 18px;
+    font-weight: bold;
+}
+h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+h4 {
+    font-size: 14px;
+}
+h5 {
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+ul {
+    list-style: decimal inside none;
+    margin: 4px;
+    padding: 4px;
+    text-align: left;
+}
+li {
+    color: #000066;
+    list-style: square inside none;
+    margin-left: 2px;
+}
+input.formButton {
+}
+.item {
+    border: 0 solid silver;
+}
+.itemHead {
+    background-color: #FFFFFF;
+    color: #000000;
+    padding: 3px;
+}
+.itemHead a {
+    color: #000000;
+}
+.itemHead a:hover {
+    color: #FF9900;
+}
+.itemInfo {
+    border-bottom: 1px solid silver;
+    font-style: italic;
+    margin-bottom: 5px;
+    padding: 3px;
+    text-align: right;
+}
+.itemTitle {
+    background-color: transparent;
+    color: #CC0000;
+    font-family: Georgia,Verdana,Arial,Helvetica,sans-serif;
+    padding: 3px;
+}
+.itemTitle a {
+    background-color: transparent;
+    color: #CC0000;
+    font-family: Georgia,Verdana,Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    padding: 3px;
+}
+.itemTitle a:hover {
+    color: #FF9900;
+}
+.itemPoster {
+    font-size: 90%;
+    font-style: italic;
+}
+.itemPostDate {
+    font-size: 90%;
+    font-style: italic;
+}
+.itemStats {
+    font-size: 80%;
+}
+.itemBody {
+    padding: 3px;
+}
+.itemBody img {
+    padding: 5px;
+}
+.itemTopicImage {
+    float: left;
+}
+.itemText {
+    line-height: 1.5em;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.itemText:first-letter {
+    font-size: 133%;
+    font-weight: bold;
+}
+.itemFoot {
+    background-color: #EFEFEF;
+    border: 1px solid silver;
+    margin-top: 5px;
+    padding: 3px;
+    text-align: right;
+}
+.itemAdminLink {
+    font-size: 90%;
+}
+.itemPermaLink {
+    font-size: 90%;
+}
+th {
+    background-color: #FFFFFF;
+    color: #CC0000;
+    font-family: Georgia,Verdana,Arial,Helvetica,sans-serif;
+    padding: 2px;
+    vertical-align: middle;
+}
+td#headerbanner {
+    background-color: #2F5376;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+}
+td#headerbar {
+    background-image: url("hbar.gif");
+    border-bottom: 1px solid #DDDDDD;
+}
+td#leftcolumn {
+    font-size: 12px;
+    width: 170px;
+}
+td#leftcolumn th {
+    background-color: #FFFFFF;
+    color: #CC0000;
+    vertical-align: middle;
+}
+td#leftcolumn div.blockTitle {
+    background-color: #E5E5E5;
+    color: #CC0000;
+    font-weight: bold;
+    padding: 5px;
+}
+td#leftcolumn legend.blockTitle {
+    color: #639ACE;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 5px;
+}
+td#leftcolumn div.blockContent {
+    font-size: 12px;
+    line-height: 130%;
+    padding: 2px 0 2px 8px;
+}
+td#centercolumn {
+    font-size: 14px;
+    padding: 3px;
+}
+td#centercolumn th {
+    background-color: #FFFFFF;
+    color: #CC0000;
+    vertical-align: middle;
+}
+td#centerCcolumn {
+    padding: 0 3px 1px;
+}
+td#centerCcolumn div.blockTitle {
+    color: #639ACE;
+    font-weight: bold;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding: 4px;
+}
+td#centerCcolumn div.blockContent {
+    font-size: 14px;
+    line-height: 120%;
+    margin-bottom: 2px;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 3px;
+}
+td#centerCcolumn td {
+    font-size: 14px;
+}
+td#centerLcolumn {
+    padding: 0 3px 0 0;
+    width: 50%;
+}
+td#centerLcolumn legend.blockTitle {
+    color: #639ACE;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 4px;
+}
+td#centerLcolumn div.blockContent {
+    border-bottom: 1px solid #DDDDDD;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    line-height: 140%;
+    margin-bottom: 2px;
+    margin-left: 3px;
+    margin-right: 2px;
+    padding: 5px;
+}
+td#centerRcolumn {
+    padding: 0 3px 0 0;
+    width: 50%;
+}
+td#centerRcolumn legend.blockTitle {
+    color: #639ACE;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 4px;
+}
+td#centerRcolumn div.blockContent {
+    border-bottom: 1px solid #DDDDDD;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    line-height: 140%;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 3px;
+    padding: 5px;
+}
+div#content {
+    padding: 8px;
+    text-align: left;
+}
+td#rightcolumn {
+    font-size: 12px;
+    width: 170px;
+}
+td#rightcolumn th {
+    background-color: #FFFFFF;
+    color: #CC0000;
+    vertical-align: middle;
+}
+td#rightcolumn div.blockTitle {
+    background-color: #E5E5E5;
+    color: #CC0000;
+    font-weight: bold;
+    padding: 4px;
+}
+td#rightcolumn legend.blockTitle {
+    color: #639ACE;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 4px;
+}
+td#rightcolumn div.blockContent {
+    font-size: 12px;
+    line-height: 140%;
+    padding: 4px;
+}
+td#rightcolumn td {
+    font-size: 12px;
+}
+tr#footerbar {
+    background-image: url("hbar.gif");
+    font-size: small;
+    margin-top: 3px;
+    text-align: center;
+}
+td#mainmenu a {
+    background-color: transparent;
+    border-bottom: 1px solid #CDCDCD;
+    display: block;
+    font-size: 12px;
+    margin: 0;
+    padding: 4px;
+}
+td#mainmenu a:hover {
+    background-color: #FFEEDD;
+}
+td#mainmenu a.menuTop {
+}
+td#mainmenu a.menuMain {
+    border-bottom: 1px solid #CDCDCD;
+}
+td#mainmenu a.menuSub {
+    border-bottom: 1px solid #CDCDCD;
+    padding-left: 15px;
+}
+td#usermenu a {
+    background-color: transparent;
+    border-bottom: 1px solid #CDCDCD;
+    display: block;
+    font-size: 12px;
+    margin: 0;
+    padding: 4px;
+}
+td#usermenu a:hover {
+    background-color: #FFEEDD;
+}
+td#usermenu a.menuTop {
+}
+td#usermenu a.menuMain {
+    border-bottom: 1px solid #CDCDCD;
+}
+td#usermenu a.highlight {
+    background-color: #FFEEDD;
+    color: #DD0000;
+}
+div#generalmenu a {
+    background-color: transparent;
+    border-bottom: 1px solid #CDCDCD;
+    display: block;
+    margin: 0;
+    padding: 4px;
+}
+div#generalmenu a:hover {
+    background-color: #FFEEDD;
+}
+div#generalmenu a.menuTop {
+}
+div#generalmenu a.menuMain {
+    border-bottom: 1px solid #CDCDCD;
+}
+div#generalmenu a.menuSub {
+    border-bottom: 1px solid #CDCDCD;
+    padding-left: 15px;
+}
+div#miscmenu a {
+    background-color: transparent;
+    border-bottom: 1px solid #CDCDCD;
+    display: block;
+    margin: 0;
+    padding: 4px;
+}
+div#miscmenu a:hover {
+    background-color: #FFEEDD;
+}
+div#miscmenu a.menuTop {
+}
+div#miscmenu a.menuMain {
+    border-bottom: 1px solid #CDCDCD;
+}
+div#miscmenu a.menuSub {
+    border-bottom: 1px solid #CDCDCD;
+    padding-left: 15px;
+}
+div#wikimenu a {
+    background-color: transparent;
+    border-bottom: 1px solid #CDCDCD;
+    display: block;
+    margin: 0;
+    padding: 4px;
+}
+div#wikimenu a:hover {
+    background-color: #FFEEDD;
+}
+div#wikimenu a.menuTop {
+}
+div#wikimenu a.menuMain {
+    border-bottom: 1px solid #CDCDCD;
+}
+div#wikimenu a.menuSub {
+    border-bottom: 1px solid #CDCDCD;
+    padding-left: 15px;
+}
+.outer {
+    border: 1px solid silver;
+}
+.outer th a {
+    color: #CCCCCC;
+}
+.head {
+    background-color: #E5E5E5;
+    font-weight: bold;
+    padding: 5px;
+}
+.even {
+    background-color: #F9F9F9;
+    padding: 5px;
+}
+.odd {
+    background-color: #E9E9E9;
+    padding: 5px;
+}
+.foot {
+    background-color: #FFFFFF;
+    font-weight: bold;
+    padding: 5px;
+}
+tr.even td {
+    background-color: #F9F9F9;
+    padding: 5px;
+}
+tr.odd td {
+    background-color: #E9E9E9;
+    padding: 5px;
+}
+div.errorMsg {
+    background-color: #FFCCCC;
+    border-color: #DDDDFF #AAAAAA #AAAAAA #DDDDFF;
+    border-style: solid;
+    border-width: 1px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
+div.confirmMsg {
+    background-color: #DDFFDF;
+    border-color: #DDDDFF #AAAAAA #AAAAAA #DDDDFF;
+    border-style: solid;
+    border-width: 1px;
+    color: #136C99;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
+div.resultMsg {
+    background-color: #CCCCCC;
+    border-color: silver #666666 #666666 silver;
+    border-style: solid;
+    border-width: 1px;
+    color: #333333;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+}
+div.xoopsCode {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px inset #000080;
+    font-family: "Courier New",Courier,monospace;
+    font-size: 100%;
+    padding: 0 6px 6px;
+}
+div.xoopsQuote {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px inset #000080;
+    font-family: "Courier New",Courier,monospace;
+    padding: 0 6px 6px;
+}
+div.xoopsCode {
+    background: none repeat scroll 0 0 #FAFAFA;
+    border: 1px solid #6C87B0;
+    color: #385A72;
+    font-family: FixedSys,"Courier New",Courier,monospace;
+    font-size: 12px;
+    height: 200px;
+    margin: 0.5em;
+    overflow: auto;
+    padding: 3px;
+    width: 500px;
+}
+html > body div.xoopsCode {
+    height: auto;
+    max-height: 250px;
+    width: 95%;
+}
+div.comText > div.xoopsCode {
+    width: 95%;
+}
+.comTitle {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.comText {
+    padding: 2px;
+}
+.comUserStat {
+    background-color: #FFFFFF;
+    border: 1px solid silver;
+    color: #2F5376;
+    font-size: 10px;
+    font-weight: bold;
+    margin: 2px;
+    padding: 2px;
+}
+.comUserStatCaption {
+    font-weight: normal;
+}
+.comUserStatus {
+    color: #2F5376;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 2px;
+    margin-top: 10px;
+}
+.comUserRank {
+    margin: 2px;
+}
+.comUserRankText {
+    font-size: 10px;
+    font-weight: bold;
+}
+.comUserRankImg {
+    border: 0 none;
+}
+.comUserName {
+}
+.comUserImg {
+    margin: 2px;
+}
+.comDate {
+    font-size: smaller;
+    font-style: italic;
+    font-weight: normal;
+}
+.comDateCaption {
+    font-style: normal;
+    font-weight: bold;
+}
+.bcenterbg {
+    background-image: url("center_bg.gif");
+    font-size: 12px;
+    font-weight: bold;
+    height: 37px;
+    letter-spacing: 1px;
+    line-height: 37px;
+    vertical-align: bottom;
+}
+.bcenterleft {
+    background-image: url("center_left.gif");
+    height: 37px;
+    width: 11px;
+}
+.bcenterright {
+    background-image: url("center_right.gif");
+    height: 37px;
+    width: 175px;
+}
+.bcenter {
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+}
+.bcentercontent {
+    padding: 8px;
+    text-align: left;
+}
+#footerbar td img {
+    vertical-align: bottom;
+}
+table.scoretable {
+    border: 2px ridge silver;
+    width: 100%;
+}
+table.scoretable td {
+    border-bottom: 1px solid #CDCDCD;
+    border-right: 1px solid #CDCDCD;
+    font-family: Georgia,Verdana,Arial,Helvetica,sans-serif;
+    padding: 1px;
+    vertical-align: middle;
+}
