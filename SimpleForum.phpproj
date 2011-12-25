@@ -18,6 +18,14 @@
 }
 "Files"
 {
+    ".gitignore"
+    {
+    "ProjRelPath" = "T"
+    }
+    ".httpd.conf"
+    {
+    "ProjRelPath" = "T"
+    }
     "CSS"
     {
     "ProjRelPath" = "T"
@@ -26,7 +34,63 @@
     {
     "ProjRelPath" = "T"
     }
+    "desktop.ini"
+    {
+    "ProjRelPath" = "T"
+    }
     "index.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "login.inc"
+    {
+    "ProjRelPath" = "T"
+    }
+    "login.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "php.ini"
+    {
+    "ProjRelPath" = "T"
+    }
+    "README.txt"
+    {
+    "ProjRelPath" = "T"
+    }
+    "registration.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "SimpleForum.intellisense.cache"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\oracle_connect.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\table_util"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\table_util\\change_table.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\table_util\\index.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\table_util\\oracle_functions.php"
+    {
+    "ProjRelPath" = "T"
+    }
+    "tools\\table_util\\style.css"
     {
     "ProjRelPath" = "T"
     }

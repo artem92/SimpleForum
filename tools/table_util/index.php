@@ -1,8 +1,8 @@
 <?php
 	//constants for connection to oracle DB
-	define (username,'lab7');
-	define (password,'lab7passwd');
-	define (db,'localhost/XE');
+	define (username,'melhior');
+	define (password,'pass');
+	define (db,'10.108.1.214/XE');
 	define (ora_home,'C:\oraclexe\app\oracle\product\10.2.0\server');
 	define (tns_admin,'C:\oraclexe\app\oracle\product\10.2.0\server\NETWORK\ADMIN');
 ?>
@@ -13,7 +13,7 @@
 	</head>
 	<body>
 		<center>
-			<h2> Lad work 7 <h2>
+			<h2> Lad work 7 </h2>
 			<h4> (variant 9, by student Kachanovskyy) </h4>
 			<table>
 				<tr>
@@ -115,7 +115,7 @@
 			
 		?>
 		<form action = '/change_table.php' align = 'center' method = 'POST'>
-			<h3> Or select the table to work with it <h3>
+			<h3> Or select the table to work with it </h3>
 			<select name = 'table'>
 			<?php
 				$st = oci_parse($c,'select * from user_tables');
