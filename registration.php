@@ -82,7 +82,8 @@
 				{
 					$err = oci_error($st);
 					if ($err['code']==1) echo 'Sorry, but this username is used already.';
-					else echo 'Database error appeared. Sorry, you didn\'t register.';
+					else echo 'Database error appeared. Sorry, you didn\'t register. ';
+					echo $err['message'];
 					echo '<br /><a href = "'.$_SERVER['PHP_SELF'].'">Try again</a>';
 				}
 				oci_free_statement($st);
