@@ -2,16 +2,9 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 session_start(); 
-define ('username','melhior');
-define ('password','pass');
-define ('db','10.108.1.214/XE');
-define ('ora_home','C:\oraclexe\app\oracle\product\10.2.0\server');
-define ('tns_admin','C:\oraclexe\app\oracle\product\10.2.0\server\NETWORK\ADMIN');
-define('guest_access', true);
-define('css','/CSS/Default.css');
 
-//require_once('forum.config');
-//require_once('/tools/oracle.conf.php');
+
+require_once('forum.config');
 require_once('engine.php');
 if (!isset($_SESSION['user_id']));
 	if (((!isset($_POST['login']) or !isset($_POST['password']))) and !guest_access)

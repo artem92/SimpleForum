@@ -3,11 +3,10 @@
 function oracle_connect()
 {
 	PutEnv('ORACLE_SID = XE');
-	PutEnv('ORACLE_HOME = C:\xe\app\oracle\product\10.2.0\server');
-	PutEnv('TNS_ADMIN = C:\xe\app\oracle\product\10.2.0\server\NETWORK\ADMIN');
-	if ($conn = oci_connect('melhior','pass','localhost/XE')) 
-	{
-		//echo 'succesfully connected to orcl!';
+	PutEnv('ORACLE_HOME = '.ora_home);
+	PutEnv('TNS_ADMIN = '.tns_admin);
+	if ($conn = oci_connect(username,password,db))
+	{ 	
 		return $conn;
 	}
 	else 

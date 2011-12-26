@@ -1,5 +1,5 @@
 <?
-	require '../path.conf';
+	require '../../forum.config';
 	require('oracle_functions.php');
 ?>
 
