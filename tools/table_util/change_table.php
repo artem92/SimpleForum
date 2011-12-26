@@ -124,7 +124,11 @@
 										if ($j!=0) $sql = $sql.', ';
 										
 										$sql = $sql.''.$key.' = ';
-										if (!is_numeric_oracle10g($table_columns[$key])) $sql = $sql.'\'';
+										if (!is_numeric_oracle10g($table_columns[$key])) 
+										{
+											$sql = $sql.'\'';
+											$table_after_submit[$key][$i] = str_replace('\'','\'\'',$table_after_submit[$key][$i]);
+										}
 										$sql = $sql.''.$table_after_submit[$key][$i];
 										if (!is_numeric_oracle10g($table_columns[$key])) $sql = $sql.'\'';
 										$sql = $sql.' ';
@@ -135,6 +139,8 @@
 								$sql = $sql.'where ROWID = chartorowid(\''.$table_after_submit['T_ROWID'][$i].'\')';
 							}
 							//echo $sql.'<br />';
+							
+							
 							
 							$st = oci_parse($c,$sql);
 							error_reporting(0);

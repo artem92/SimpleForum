@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <?	
-	require_once('/tools/oracle.conf.php');
+	require_once('/tools/oracle.conf');
 	require_once('/engine.php');
-	require_once('/tools/oracle_utils.php');
+	require_once('/tools/oracle_connect.php');
 ?>
 <html>
 <head>
@@ -59,6 +59,10 @@
                     <td><input name="password" type="password" size="20" > </td>
                   </tr>
 				  <tr>
+                    <td>Repeat password:</td>
+                    <td><input name="repeat_password" type="password" size="20" > </td>
+                  </tr>
+				  <tr>
                     <td>Do you let other users to watch your profile?</td>
                     <td>
 						<input name="profile_visibility" type="radio" value = "yes" '.$p_v_yes.'>Yes <br />
@@ -77,7 +81,8 @@
                 if (isset($_POST['lets_submit'])) $s = $s.'<br /><br />
                 <font size = "3" color = "red">Please, fill in the necessary fields properly (according to the rules mentioned above)</font>'; 
                 
-                if (!is_valid_usrnm_or_pw(array($_POST['username'],$_POST['password']))) echo $s;
+                if ((!is_valid_usrnm_or_pw(array($_POST['username'],$_POST['password'],$_POST['repeat_password'])))||
+				($_POST['password']!=$_POST['repeat_password'])) echo $s;
                 
                 else //actual registration - put user to the DB
                 {	
@@ -98,7 +103,7 @@
                         error_reporting(0);
                         $sql = 'insert into USERS(USERNAME,PASSWORD,INFO,PROFILE_VISIBILITY) 
                         values (\''.$username.'\',\''.$password.'\',\''.$info.'\',\''.$p_v.'\')';
-                        echo $sql;
+                        //echo $sql;
                         $st = oci_parse($c,$sql);
                         $r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
                         if ($r)
@@ -111,7 +116,7 @@
                             $err = oci_error($st);
                             if ($err['code']==1) echo 'Sorry, but this username is used already.';
                             else echo 'Database error appeared. Sorry, you didn\'t register. ';
-                            echo $err['message'];
+                            //echo $err['message'];
                             echo '<br /><a href = "'.$_SERVER['PHP_SELF'].'">Try again</a>';
                         }
                         oci_free_statement($st);
