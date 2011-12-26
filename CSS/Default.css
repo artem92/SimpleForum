@@ -1,50 +1,66 @@
 /* CSS Document */
-.document
-{
-	margin-left:0%;
-	width:100%;
-}
-.header {
-	height: 100px;
-	width: 100%;
-	padding:10px;
-	border-style:groove;
-	border-radius:10px;
-	clear:both;
-}
+/* Containers*/
+.left-column {width:200px; float: left; }
+.right-column {	float:right; width:220px;}
+.center-column { margin-left:220px; margin-right:225px; }
+.header {height:85px; 	border-style:groove; clear:both; margin-bottom:5px; }
+.bottom { padding:10px; border-style:groove; clear:both; margin-top:5px}
+.document {}
 
-.bottom {
-	width: 100%;
-	padding:10px;
-	order-style:groove;
-	border-radius:10px;
-	clear:both;
-}
 .menu_left {
 	float:left;
 	height: 400px;
-	width:20%;
-	padding:10px;
+	width:200px;
+	padding:5px;
 	border-style:groove;
 	border-radius:10px;
 	clear:left;
+	margin-right:5px;
+	
 }
-.menu_right {
-	float:left;
-	height: 400px;
-	width:20%;
+
+.profile-auth {
+	width:200px;
+	padding:5px;
+	border-style:groove;
+	border-radius:10px;
+	clear:right;
+	margin-left:5px;
+	margin-bottom:5px;
+}
+
+.right-content{
+	width: 200px;
+	float:right;
+}
+.message {
+	padding:0px;
+	border-style:groove;
+}
+
+.login_window {
+	float:left
+	text-align:center;
+	height: 150px;
+	width:300px;
 	padding:10px;
 	border-style:groove;
 	border-radius:10px;
 	clear:right;
+	margin:10px
 }
-.content {
-	float:left;
-	height: 400px;
-	width: 60%;
-	padding:10px;
-	border-style:groove;
-	border-radius:10px;
+.button {
+	width: 17em;
+	height: 3em;
 }
-
-
+.post-header
+{
+	background-color:#09F;
+	padding-left:5px;
+	padding-top:5px;
+	padding-right:5px;
+}
+.post-content
+{
+	padding:5px;
+}

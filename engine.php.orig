@@ -1,31 +1,33 @@
 <?php
+<<<<<<< HEAD
+require_once("tools/oracle_utils.php");
+function get_user_id($login, $password)
+{
+=======
 function get_user_id($login, $password)
 {
 	require_once("tools/oracle_utils.php");
+>>>>>>> origin/master
 	$conn = oracle_connect();
 	if (isset($login) and isset($password))
 	{
 		$query = "SELECT user_id
-			FROM users
-			WHERE username='".$login."' AND password='".$password."'";
+<<<<<<< HEAD
+				  FROM users
+				  WHERE username='".$login."' AND password='".$password."'";
 		if ($st = oci_parse($conn, $query) and oci_execute($st))
 		{
-			$row = oci_fetch_assoc($st);
-			if (isset( $row)) 
-			{
-				$var = $row['USER_ID'];
-				return $var;
-			}
+			if ($row = oci_fetch_assoc($st)) 
+				return $row['USER_ID'];
 			else return '-1';
 		}	
 		else 
-		{
 			return 'oracle error';
-		}
 	}
-	else return '-1';
+		else return '-1';
 }
 
+//Returns assoc 
 function get_message($message_id)
 {
 	$conn = oracle_connect();
@@ -41,7 +43,7 @@ function get_message($message_id)
 	else 
 		return 'oracle error';
 }
-
+//returns message div with id specified
 function show_message($message_id)
 {
 	$msg = get_message($message_id);
@@ -52,14 +54,23 @@ function show_message($message_id)
 	
 	echo $result;
 }
-
-function show_left_menu()
+//returns user info(assoc array) for user with id specified
+function get_user_info($user_id)
 {
-	$result = '<div class="menu-left" >';
-	$result .= 'Left</div> ';
-	echo $result;
+	$conn = oracle_connect();
+	$query = "SELECT *
+              FROM users
+              WHERE  user_id = ".$user_id;
+	if ($st = oci_parse($conn, $query) and oci_execute($st))
+	{
+		$row = oci_fetch_assoc($st); 
+		return $row;
+	}	
+	else 
+		return 'oracle error';
 }
 
+//Shows div with login window or profile
 function show_login_window()
 {
 	$str = ' <div class="profile-auth">';
@@ -92,21 +103,7 @@ function show_login_window()
 	$str .= '</div>';
 	echo $str;
 }
-//returns user info(assoc array) for user with id specified
-function get_user_info($user_id)
-{
-	$conn = oracle_connect();
-	$query = "SELECT *
-              FROM users
-              WHERE  user_id = ".$user_id;
-	if ($st = oci_parse($conn, $query) and oci_execute($st))
-	{
-		$row = oci_fetch_assoc($st); 
-		return $row;
-	}	
-	else 
-		return 'oracle error';
-}
+
 //Shows header
 function show_header()
 {
@@ -114,16 +111,53 @@ function show_header()
 			Hello world
 		</div>';
 echo $str;
+=======
+			FROM users
+			WHERE username='".$login."' AND password='".$password."'";
+		if ($st = oci_parse($conn, $query) and oci_execute($st))
+		{
+			$row = oci_fetch_assoc($st);
+			if (isset( $row)) 
+			{
+				$var = $row['USER_ID'];
+				return $var;
+			}
+			else return '-1';
+		}	
+		else 
+		{
+			return 'oracle error';
+		}
+	}
+	else return '-1';
+>>>>>>> origin/master
 }
-function show_bottom()
+
+function show_left_menu()
 {
-	$str = '<div class="bottom">
-			Hello world
-		</div>';
+	$str = '<div class="menu_left">
+            Hello world
+        </div>';
+//DISCLAIMER - do not tabify end of heredoc
 echo $str;
 }
 
+<<<<<<< HEAD
+function show_content()
+{
+	$str = '<div class="message">'.'Session_ID: '
+	.$_SESSION["user_id"].'</div>';
+	echo $str;
+}
 
+function show_bottom()
+{
+	$str = '<div class="bottom"> Bottom </div>';
+	echo $str;
+}
+
+
+=======
 function is_valid_usrnm_or_pw($s) //to check if string, entered to username or password field, is correct
 {
 	$b = array();
@@ -132,4 +166,5 @@ function is_valid_usrnm_or_pw($s) //to check if string, entered to username or p
 	if (!((isset($sub_s))&&(strlen($sub_s)==preg_match_all('/\w/',$sub_s,$b))&&($sub_s!=''))) $ret=false;
 	return $ret;
 }
+>>>>>>> origin/master
 ?>
