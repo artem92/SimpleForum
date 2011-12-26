@@ -1,7 +1,33 @@
 <?php
+
+function oracle_connect()
+{
+	PutEnv('ORACLE_SID = XE');
+	PutEnv('ORACLE_HOME = C:\xe\app\oracle\product\10.2.0\server');
+	PutEnv('TNS_ADMIN = C:\xe\app\oracle\product\10.2.0\server\NETWORK\ADMIN');
+	if ($conn = oci_connect('melhior','pass','localhost/XE')) 
+	{
+		//echo 'succesfully connected to orcl!';
+		return $conn;
+	}
+	else 
+	{
+		$err = oci_error();
+		echo 'Oracle error '.$err[text];
+		return $err;
+	}
+}
+function oracle_disconnect($conn)
+{
+	if (OCILogoff($conn))
+		;//echo succesfully disconnected from Oracle!';
+	else
+		echo 'Error while disconnecting from Oracle';
+}
+
 function get_user_id($login, $password)
 {
-	require_once("tools/oracle_utils.php");
+	
 	$conn = oracle_connect();
 	if (isset($login) and isset($password))
 	{
@@ -123,7 +149,6 @@ function show_bottom()
 echo $str;
 }
 
-
 function is_valid_usrnm_or_pw($s) //to check if string, entered to username or password field, is correct
 {
 	$b = array();
@@ -132,4 +157,65 @@ function is_valid_usrnm_or_pw($s) //to check if string, entered to username or p
 	if (!((isset($sub_s))&&(strlen($sub_s)==preg_match_all('/\w/',$sub_s,$b))&&($sub_s!=''))) $ret=false;
 	return $ret;
 }
+
+function open_statement($sql)
+{
+	$conn = oracle_connect();
+	$statement = oci_parse($conn, $sql);
+	oci_execute($statement);
+	return $statement;
+}
+
+function draw_table($sql)
+{
+	$conn = oracle_connect();
+	error_reporting(0);
+	$statement = oci_parse($conn, $sql);
+	oci_execute($statement);
+	echo "<table border='1'> <tr>";
+	for ($i=1; $i < oci_num_fields($statement)+1; $i++)
+	{
+		echo "<td>";
+		echo oci_field_name($statement, $i);
+		echo "</td>";
+	}
+	oci_num_rows($statement);
+	while($row = oci_fetch_row($statement))
+	{
+		echo "<tr>";
+		for ($j=0; $j < oci_num_fields($statement); $j++)
+		{
+			echo "<td>";
+			echo $row[$j];
+			echo "</td>";
+		}	
+		echo "</tr>";
+	}
+	echo "</tr> </table>";
+	error_reporting(E_ALL);
+}
+
+
+function show_branches()
+{
+	$sql = 'select * from branches';
+	$conn = oracle_connect();
+	error_reporting(0);
+	$statement = oci_parse($conn, $sql);
+	oci_execute($statement);
+	echo '<table border="1" width="100%"> ';
+	while($row = oci_fetch_assoc($statement))
+	{
+		echo "<tr>";
+			echo "<td>";
+			echo '<a href="/viewbranch.php?branch_id='.$row['BRANCH_ID'].'">'.$row['BRANCH_NAME'].'</a>';
+			echo "</td>";
+		echo "</tr>";
+	}
+	echo " </table>";
+	error_reporting(E_ALL);
+}
+
+
+
 ?>

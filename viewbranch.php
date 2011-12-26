@@ -13,7 +13,7 @@ define('css','/CSS/Default.css');
 //require_once('forum.config');
 //require_once('/tools/oracle.conf.php');
 require_once('engine.php');
-if (!isset($_SESSION['user_id']));
+if (!isset($_SESSION['user_id']))
 	if (((!isset($_POST['login']) or !isset($_POST['password']))) and !guest_access)
 	{
 		header('Refresh: 2; URL=http://simpleforum/login.php');
