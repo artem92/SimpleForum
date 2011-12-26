@@ -26,7 +26,6 @@ if (!isset($_SESSION['user_id']))
 		$_SESSION['user_id'] = -1;
 	else
 		$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
-echo $_SESSION['user_id'];
 ?>
 <!-- header -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

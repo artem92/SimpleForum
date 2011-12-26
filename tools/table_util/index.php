@@ -1,7 +1,7 @@
 <?php
-	//constants for connection to oracle DB
-	require '../oracle.conf.php';
-	require '../path.conf';
+	//configuration
+	require_once('../../forum.config');
+
 ?>
 			
 <html>
