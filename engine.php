@@ -63,7 +63,7 @@ function show_left_menu()
 function show_login_window()
 {
 	$str = ' <div class="profile-auth">';
-	if ($_SESSION['user_id']<0)
+	if ($_SESSION['user_id']<0 or !isset($_SESSION['user_id']) )
 		{ 
 		$str .= 'Please login with your login and password:
 			<hr />
