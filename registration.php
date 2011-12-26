@@ -1,4 +1,4 @@
--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <?	
 	require_once('/tools/oracle.conf');
 	require_once('/engine.php');
@@ -20,12 +20,12 @@
     <div class="document" >
         <div class="left-column">
             <!-- Place your left column content here-->
-            <? show_left_menu(); ?>
+            <? //show_left_menu(); ?>
         </div>
         <div class="right-column">
            <!-- Place your right column content here-->
            <? //show_login_window(); ?>
-           blalgldf
+           
         </div>
         <div class="center-column">
       		<!-- Place your center column content here-->
@@ -35,6 +35,15 @@
                     else $usrnm = '';
                     if (isset($_POST['info'])) {$info = $_POST['info'];}
                     else $info = '';
+					$p_v_yes = '';
+					$p_v_no = '';
+					if (isset($_POST['profile_visibility'])) 
+					{
+						if ($_POST['profile_visibility']=='yes')
+							$p_v_yes = 'checked = "yes"';
+						else $p_v_no = 'checked = "yes"';
+					}
+					else $p_v_yes = 'checked = "yes"';
                 $s = '<h3>Welcome to the SimpleForum registration page! To register, enter your username and password in the fields below:</h3>
                 <h4>(Note that all symbols in your username and password should be latin letters, numbers or underscores("_") in any sequence.
                 Username and password should be up to 200 symbols in length, info - up to 4000)</h4>
@@ -47,7 +56,18 @@
                   </tr>
                   <tr>
                     <td>Password:</td>
-                    <td><input name="password" type="password" size="20" /> </td>
+                    <td><input name="password" type="password" size="20" > </td>
+                  </tr>
+				  <tr>
+                    <td>Repeat password:</td>
+                    <td><input name="repeat_password" type="password" size="20" > </td>
+                  </tr>
+				  <tr>
+                    <td>Do you let other users to watch your profile?</td>
+                    <td>
+						<input name="profile_visibility" type="radio" value = "yes" '.$p_v_yes.'>Yes <br />
+						<input name="profile_visibility" type="radio" value = "no" '.$p_v_no.'>No
+					</td>
                   </tr>
                    <tr>
                     <td>Your personal information*:</td>
@@ -61,10 +81,12 @@
                 if (isset($_POST['lets_submit'])) $s = $s.'<br /><br />
                 <font size = "3" color = "red">Please, fill in the necessary fields properly (according to the rules mentioned above)</font>'; 
                 
-                if (!is_valid_usrnm_or_pw(array($_POST['username'],$_POST['password']))) echo $s;
+                if ((!is_valid_usrnm_or_pw(array($_POST['username'],$_POST['password'],$_POST['repeat_password'])))||
+				($_POST['password']!=$_POST['repeat_password'])) echo $s;
                 
                 else //actual registration - put user to the DB
                 {	
+					//echo $_POST['profile_visibility'];
                     //echo 'username: \''.$_POST['username'].'\' <br />';
                     //echo 'password: \''.$_POST['password'].'\'';
                     PutEnv('ORACLE_SID = XE');
@@ -75,9 +97,12 @@
                         $info = str_replace('\'','\'\'',$_POST['info']);
                         $username = str_replace('\'','\'\'',$_POST['username']);
                         $password = str_replace('\'','\'\'',$_POST['password']);
+						if ($_POST['profile_visibility']=='yes') $p_v = 'public';
+						else $p_v = 'private';
+						
                         error_reporting(0);
-                        $sql = 'insert into USERS(USERNAME,PASSWORD,INFO) 
-                        values (\''.$username.'\',\''.$password.'\',\''.$info.'\')';
+                        $sql = 'insert into USERS(USERNAME,PASSWORD,INFO,PROFILE_VISIBILITY) 
+                        values (\''.$username.'\',\''.$password.'\',\''.$info.'\',\''.$p_v.'\')';
                         //echo $sql;
                         $st = oci_parse($c,$sql);
                         $r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
@@ -91,7 +116,7 @@
                             $err = oci_error($st);
                             if ($err['code']==1) echo 'Sorry, but this username is used already.';
                             else echo 'Database error appeared. Sorry, you didn\'t register. ';
-                            echo $err['message'];
+                            //echo $err['message'];
                             echo '<br /><a href = "'.$_SERVER['PHP_SELF'].'">Try again</a>';
                         }
                         oci_free_statement($st);
