@@ -13,8 +13,7 @@ define('css','/CSS/Default.css');
 //require_once('forum.config');
 //require_once('/tools/oracle.conf.php');
 require_once('engine.php');
-echo $_SESSION['user_id'];
-if (!isset($_SESSION['user_id']));
+if (!isset($_SESSION['user_id']))
 	if (((!isset($_POST['login']) or !isset($_POST['password']))) and !guest_access)
 	{
 		header('Refresh: 2; URL=http://simpleforum/login.php');
@@ -27,6 +26,7 @@ if (!isset($_SESSION['user_id']));
 		$_SESSION['user_id'] = -1;
 	else
 		$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
+echo $_SESSION['user_id'];
 ?>
 <!-- header -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

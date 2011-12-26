@@ -1,5 +1,5 @@
 <?php
-	require('oracle.conf');
+	//require_once('oracle.conf.php');
 	
 	function oracle_connect()
 	{

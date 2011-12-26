@@ -1,6 +1,6 @@
 <?php
 	//constants for connection to oracle DB
-	require '../oracle.conf';
+	require '../oracle.conf.php';
 	require '../path.conf';
 ?>
 			
