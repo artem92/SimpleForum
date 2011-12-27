@@ -17,7 +17,9 @@ insert_standart_header();
 <body>
 <div style="width:90%; margin-left:5%; ">
     <div >
-    <? show_header(); ?>
+    <? show_header(); 
+		viewtopic_show_top();
+	?>
     </div>
     <div class="document" >
         <div class="left-column">

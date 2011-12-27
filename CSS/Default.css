@@ -5,6 +5,7 @@
 div { /* border-style:groove; */}
 .center-column { margin-left:220px; margin-right:225px;  /*border-style:groove; */}
 .header {height:85px; 	border-style:groove; clear:both; margin-bottom:5px; }
+.top {height:85px; 	border-style:groove; clear:both; margin-bottom:5px; }
 .bottom { padding:10px; border-style:groove; clear:both; margin-top:5px}
 .document {}
 
