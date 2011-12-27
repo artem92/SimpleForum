@@ -81,7 +81,7 @@ function show_message($message_id)
 	$result = '<div class="message" >';
 	$userinfo = get_user_info($msg['USER_ID']);
 	$result .= '<div class="post-header">'.
-	'<div class="post-header-right" >User '.$userinfo['USERNAME'].' posted on <'.$msg['MSG_TIME'].'></div> </div>';
+	'<div class="post-header-right" >User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'].'</div> </div>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
 	echo $result;
@@ -152,6 +152,7 @@ function show_login_window()
 			$info = get_user_info($_SESSION['user_id']);
 			$str .= "Hello, ".$info['USERNAME']; //using oracle style names (fetched from database)
 			$str .= '<form action="index.php" method="get"><input name="action" type="submit" value="logout" /></form>';
+			$str .= '<a href="profile.php?user_id='.$_SESSION['user_id'].'">Profile</a>';
 			
 		}
 	$str .= '</div>';
