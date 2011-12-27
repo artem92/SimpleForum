@@ -1,8 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <?	
-	require_once('/tools/oracle.conf');
+	require_once('/forum.config');
 	require_once('/engine.php');
-	require_once('/tools/oracle_connect.php');
 ?>
 <html>
 <head>
@@ -29,12 +28,13 @@
         </div>
         <div class="center-column">
       		<!-- Place your center column content here-->
-					<? 
-                    $is_set = false;
+				<? 
                     if (isset($_POST['username'])) {$usrnm = $_POST['username'];}
                     else $usrnm = '';
                     if (isset($_POST['info'])) {$info = $_POST['info'];}
                     else $info = '';
+					if (isset($_POST['email'])) {$email = $_POST['email'];}
+                    else $email = '';
 					$p_v_yes = '';
 					$p_v_no = '';
 					if (isset($_POST['profile_visibility'])) 
@@ -46,7 +46,7 @@
 					else $p_v_yes = 'checked = "yes"';
                 $s = '<h3>Welcome to the SimpleForum registration page! To register, enter your username and password in the fields below:</h3>
                 <h4>(Note that all symbols in your username and password should be latin letters, numbers or underscores("_") in any sequence.
-                Username and password should be up to 200 symbols in length, info - up to 4000)</h4>
+                Username, password and Email should be up to 200 symbols in length, info - up to 4000)</h4>
                 <br />
                 <form action="'.$_SERVER['PHP_SELF'].'" method="post">
                 <table border="0">
@@ -69,8 +69,12 @@
 						<input name="profile_visibility" type="radio" value = "no" '.$p_v_no.'>No
 					</td>
                   </tr>
+				  <tr>
+                    <td>Email*: </td>
+                    <td><input name="email" type="text" size="20" value = "'.$email.'"></td>
+                  </tr>
                    <tr>
-                    <td>Your personal information*:</td>
+                    <td>Your personal information*: </td>
                     <td><textarea rows = "10" cols = "40" name = "info" class = "textarea">'.$info.'</textarea> </td>
                   </tr>
                 </table>
@@ -99,10 +103,11 @@
                         $password = str_replace('\'','\'\'',$_POST['password']);
 						if ($_POST['profile_visibility']=='yes') $p_v = 'public';
 						else $p_v = 'private';
+						if (isset($_POST['email'])) $email = str_replace('\'','\'\'',$_POST['email']);
 						
                         error_reporting(0);
-                        $sql = 'insert into USERS(USERNAME,PASSWORD,INFO,PROFILE_VISIBILITY) 
-                        values (\''.$username.'\',\''.$password.'\',\''.$info.'\',\''.$p_v.'\')';
+                        $sql = 'insert into USERS(USERNAME,PASSWORD,INFO,EMAIL,PROFILE_VISIBILITY) 
+                        values (\''.$username.'\',\''.$password.'\',\''.$info.'\',\''.$email.'\',\''.$p_v.'\')';
                         //echo $sql;
                         $st = oci_parse($c,$sql);
                         $r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
