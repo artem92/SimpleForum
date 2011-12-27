@@ -43,7 +43,10 @@ create table TOPICS (
 TOPIC_ID number primary key ,
 TOPIC_NAME varchar2(200) not null,
 BRANCH_ID number,
-foreign key (BRANCH_ID) references BRANCHES(BRANCH_ID));
+USER_ID number,
+CREATE_DATE DATE not null,
+foreign key (BRANCH_ID) references BRANCHES(BRANCH_ID),
+foreign key (USER_ID) references USERS(USER_ID));
 
 create table MESSAGES (
 MSG_ID number primary key,
@@ -95,5 +98,10 @@ begin
 		into :new.MSG_ID
 		from dual;
 	end if;
+	if :new.MSG_TIME is null then
+		select sysdate 
+		into :new.MSG_TIME
+		from dual;
+   end if;
 end;
 /
