@@ -128,9 +128,18 @@ function show_login_window()
 	$str = ' <div class="profile-auth">';
 	if (!isset($_SESSION['user_id']))
 		{ 
+		$s = '';
+		$i = 1;
+		foreach($_GET as $key=>$val)
+		{
+			if ($i==1) $s .='?'.$key.'='.$val;
+			else $s .='&'.$key.'='.$val; 
+			$i+=1;
+		}
+			//echo $s;
 		$str .= 'Please login with your login and password:
 			<hr />
-			<form action="index.php" method="post">
+			<form action="'.$_SERVER['PHP_SELF'].$s.'" method="post">
 			<table width="150">
 				<tr><td align="left">Login: </td>
 					<td><input name="login" type="text" size="13" /></td></tr>
@@ -264,12 +273,12 @@ function show_all_messages($topic_id)
 	error_reporting(0);
 	$statement = oci_parse($conn, $sql);
 	oci_execute($statement);
-	echo '<table border="1" width="100%"> ';
+	//echo '<table border="1" width="100%"> ';
 	while($row = oci_fetch_assoc($statement))
 	{
 		show_message($row['MSG_ID']);
 	}
-	echo " </table>";
+	//echo " </table>";
 	error_reporting(E_ALL);
 }
 function show_stats($out = true)
