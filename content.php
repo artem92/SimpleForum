@@ -305,7 +305,7 @@ function profile_show_center()
 								
 								if ($user_id!=$viewer_id)
 								{
-									if ($ar['PROFILE_VISIBILITY']=='private') echo 'Sorry, but personal information of this user is private!';
+									if ($ar['PROFILE_VISIBILITY']=='private') echo '<h2>Sorry, but personal information of this user is private!</h2>';
 									else 
 									{
 										echo 'Username: '.$ar['USERNAME'].'<br />';
