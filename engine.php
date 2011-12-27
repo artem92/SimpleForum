@@ -1,4 +1,5 @@
 <?php
+require_once('engine_ex.php');
 function oracle_connect()
 {
 	PutEnv('ORACLE_SID = XE');

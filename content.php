@@ -24,7 +24,7 @@ echo $str;
 ////////////////////////////////////Index section///////////////////////////////////////////////
 function index_show_top()
 {
-	$str = '<div class="top">
+	$str = '<div class="top">'.show_index_path().'
 		</div>';
 	echo $str;
 }
@@ -46,8 +46,8 @@ function index_show_right()
 //////////////////////////////////////ViewBranch/////////////////////////////////////////////////////////
 function viewbranch_show_top()
 {
-	$str = '<div class="top">
-		</div>';
+	$str = '<div class="top">';
+	$str.=	show_branch_path($_GET['branch_id']).'</div>';
 	echo $str;
 }
 
@@ -66,8 +66,7 @@ function viewbranch_show_right()
 //////////////////////////////////////ViewTopic///////////////////////////////////////////////////////////
 function viewtopic_show_top()
 {
-	$str = '<div class="top">
-		</div>';
+	$str = '<div class="top">'.show_topic_path($_GET['topic_id']).'</div>';
 	echo $str;
 }
 
@@ -96,7 +95,7 @@ function viewtopic_show_right()
 /////////////////////////////////////Registration///////////////////////////////////////////////////////////
 function registration_show_top()
 {
-	$str = '<div class="top">
+	$str = '<div class="top">'.show_registration_path().'
 		</div>';
 	echo $str;
 }
@@ -244,7 +243,7 @@ function profile_js_header()
 
 function profile_show_top()
 {
-	$str = '<div class="top">
+	$str = '<div class="top">'.show_profile_path().'
 		</div>';
 	echo $str;
 }
