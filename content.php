@@ -295,14 +295,14 @@ function profile_show_center()
 								
 								if ($user_id!=$viewer_id)
 								{
-									if ($ar['PROFILE_VISIBILITY']=='private') echo 'Sorry, but personal information of this user is private!';
+									if ($ar['PROFILE_VISIBILITY']=='private') echo '<h4>Sorry, but personal information of this user is private!</h4>';
 									else 
 									{
-										echo 'Username: '.$ar['USERNAME'].'<br />';
-										echo 'Access level: '.$ar['ACCESS_LEVEL'].'<br />';
-										echo 'Number of posts: '.$msg_num.'<br />';
-										echo 'Email: '.$ar['EMAIL'].'<br />';
-										echo 'Personal information: "'.$ar['INFO'].'"<br />';
+										echo '<h4>Username: '.$ar['USERNAME'].'</h4>';
+										echo '<h4>Access level: '.$ar['ACCESS_LEVEL'].'</h4>';
+										echo '<h4>Number of posts: '.$msg_num.'</h4>';
+										echo '<h4>Email: '.$ar['EMAIL'].'</h4>';
+										echo '<h4>Personal information: "'.$ar['INFO'].'"</h4>';
 									}
 								}
 								else

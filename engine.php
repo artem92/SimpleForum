@@ -67,7 +67,7 @@ function show_message($message_id)
 	$msg = get_message($message_id);
 	$result = '<div class="message" >';
 	$userinfo = get_user_info($msg['USER_ID']);
-	$result .= '<div class="post-header"> <div class="post-header-left"><strong>'.$msg['MSG_TOPIC'].'</strong></div>'.
+	$result .= '<div class="post-header">'.
 	'<div class="post-header-right" >User '.$userinfo['USERNAME'].' posted on '.$msg['MSG_TIME'].'</div> </div>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
