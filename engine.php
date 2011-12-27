@@ -49,6 +49,19 @@ function get_user_id($login, $password)
 function get_message($message_id)
 {
 	$conn = oracle_connect();
+	$sql = 'alter session set nls_date_format = \'DD/MM/YYYY HH24:MI:SS\'';
+	$st = oci_parse($conn,$sql);
+	if (oci_execute($st))
+	{
+		//success
+	}
+	else
+	{
+		$err = oci_error($c);
+		echo 'Oracle error '.$err['message'].'<br />';
+	}
+	
+	
 	$query = "SELECT *
               FROM messages
               WHERE  msg_id = ".$message_id;
@@ -67,8 +80,8 @@ function show_message($message_id)
 	$msg = get_message($message_id);
 	$result = '<div class="message" >';
 	$userinfo = get_user_info($msg['USER_ID']);
-	$result .= '<div class="post-header"> <div class="post-header-left"><strong>'.$msg['MSG_TOPIC'].'</strong></div>'.
-	'<div class="post-header-right" >User '.$userinfo['USERNAME'].' posted on '.$msg['MSG_TIME'].'</div> </div>';
+	$result .= '<div class="post-header">'.
+	'<div class="post-header-right" >User '.$userinfo['USERNAME'].' posted on <'.$msg['MSG_TIME'].'></div> </div>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
 	echo $result;
@@ -276,5 +289,67 @@ function show_menu()
 	$result .= show_branches(false);  //disable direct output in show_branches
 	$result .= '</div> ';
 	echo $result;
+}
+
+function show_add_message()
+{
+	if (isset($_SESSION['user_id']))
+	{
+		echo '<center>';
+		echo '<form action ="'.$_SERVER['PHP_SELF'].'?topic_id='.$_GET['topic_id'].'" method = "POST">';
+		echo '<h4>Enter your message:</h4>';
+		echo '<textarea rows = "10" cols = "60" name = "msg_text" class = "textarea"></textarea>';
+		echo '<br />';
+		echo '<input type = "hidden" name = "lets_post" value = "true">';
+		echo '<input type = "submit" value = "Post message">';
+		echo '</form>';
+		echo '</center>';
+	}
+	else 
+	{
+		echo '<h4>You can\'t leave messages, as you\'re a guest.</h4><br />';;
+	}
+}
+
+function add_message()
+{
+	if ((isset($_POST['lets_post']))
+	&&(isset($_POST['msg_text']))
+	&&($_POST['msg_text']!=''))
+	{	
+		$msg_text = $_POST['msg_text'];
+		$user_id = $_SESSION['user_id'];
+		$topic_id = $_GET['topic_id'];
+		$sql = 'insert into MESSAGES(MSG_TEXT,USER_ID,TOPIC_ID)	values (\''.
+		$msg_text.'\','.
+		$user_id.','.
+		$topic_id.')';
+		//echo $sql;
+		
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			echo 'succesfully connected';
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			if ($r)
+			{
+				//success
+				echo '<h3>Your messege added successfully!</h3>';
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
+	}
 }
 ?>
