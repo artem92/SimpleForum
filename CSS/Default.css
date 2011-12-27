@@ -1,7 +1,8 @@
 /* CSS Document */
 /* Containers*/
-.left-column {width:200px; float: left; /* border-style:groove; */}
+.left-column {width:200px; float: left;  /*border-style:groove; */ }
 .right-column {	float:right; width:220px; /* border-style:groove; */}
+div { /* border-style:groove; */}
 .center-column { margin-left:220px; margin-right:225px;  /*border-style:groove; */}
 .header {height:85px; 	border-style:groove; clear:both; margin-bottom:5px; }
 .bottom { padding:10px; border-style:groove; clear:both; margin-top:5px}
@@ -55,14 +56,53 @@
 }
 .post-header
 {
-	background-color:#09F;
 	padding-left:5px;
 	padding-top:5px;
 	padding-right:5px;
+	margin-bottom:10px;
 }
+
+.post-header-left
+{
+	float:left;
+	width:47%;
+	background-color:#6FC;
+	padding-left:5px;
+	padding-top:5px;
+	padding-right:5px;
+	text-align:left;
+	margin-bottom:10px;
+}
+
+.post-header-right
+{
+	width:50%;
+	float:left;
+	text-align:right;
+	background-color:#6FC;
+	padding-left:5px;
+	padding-top:5px;
+	padding-right:5px;
+	margin-bottom:10px;
+}
+
+
+
 .post-content
 {
-	padding:5px;
+	padding:15px;
+}
+
+.topic
+{
+	padding:0px;
+	border-style:groove;
+}
+
+.branch
+{
+	padding:0px;
+	border-style:groove;
 }
 
 .textarea

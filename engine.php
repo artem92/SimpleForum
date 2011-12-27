@@ -1,14 +1,11 @@
 <?php
-
 function oracle_connect()
 {
 	PutEnv('ORACLE_SID = XE');
 	PutEnv('ORACLE_HOME = '.ora_home);
 	PutEnv('TNS_ADMIN = '.tns_admin);
 	if ($conn = oci_connect(username,password,db))
-	{ 	
 		return $conn;
-	}
 	else 
 	{
 		$err = oci_error();
@@ -31,8 +28,8 @@ function get_user_id($login, $password)
 	if (isset($login) and isset($password))
 	{
 		$query = "SELECT user_id
-			FROM users
-			WHERE username='".$login."' AND password='".$password."'";
+				  FROM users
+			      WHERE username='".$login."' AND password='".$password."'";
 		if ($st = oci_parse($conn, $query) and oci_execute($st))
 		{
 			$row = oci_fetch_assoc($st);
@@ -44,9 +41,7 @@ function get_user_id($login, $password)
 			else return '-1';
 		}	
 		else 
-		{
 			return 'oracle error';
-		}
 	}
 	else return '-1';
 }
@@ -72,18 +67,46 @@ function show_message($message_id)
 	$msg = get_message($message_id);
 	$result = '<div class="message" >';
 	$userinfo = get_user_info($msg['USER_ID']);
-	$result .= '<div class="post-header" >User '.$userinfo['USERNAME'].' posted on '.$msg['MSG_TIME'].'</div> <hr>';
+	$result .= '<div class="post-header"> <div class="post-header-left"><strong>'.$msg['MSG_TOPIC'].'</strong></div>'.
+	'<div class="post-header-right" >User '.$userinfo['USERNAME'].' posted on '.$msg['MSG_TIME'].'</div> </div>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
-	
 	echo $result;
 }
 
 function show_left_menu()
 {
 	$result = '<div class="menu-left" >';
-	$result .= 'Left</div> ';
+	$result .= 'Menu';
+	$result .= show_branches(false);  //disable direct output in show_branches
+	$result .= '</div> ';
 	echo $result;
+}
+
+function insert_standart_header()
+{
+session_start();
+if (isset($_GET['action']))
+{
+	if ($_GET['action']=='logout')
+	{
+		session_unset();
+	}
+}
+require_once('forum.config');
+require_once('engine.php');
+require_once('content.php');
+if (!isset($_SESSION['user_id']));
+	if (((!isset($_POST['login']) or !isset($_POST['password']))) and !guest_access)
+	{
+		header('Refresh: 2; URL=http://simpleforum/login.php');
+		echo 'Guest users are not allowed. ';
+		echo 'You will be redirected to login page in 2 sec...';
+		exit;
+	}
+	else 
+	if (!(!isset($_POST['login']) or !isset($_POST['password'])))
+		$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
 }
 
 function show_login_window()
@@ -136,22 +159,6 @@ function get_user_info($user_id)
 	else 
 		return 'oracle error';
 }
-//Shows header
-function show_header()
-{
-	$str = '<div class="header">
-			<a href="index.php">SimpleForum Home</a>
-			<a href="tools/table_util/index.php">Admin Page</a>
-		</div>';
-echo $str;
-}
-function show_bottom()
-{
-	$str = '<div class="bottom">
-			Hello world
-		</div>';
-echo $str;
-}
 
 function is_valid_usrnm_or_pw($s) //to check if string, entered to username or password field, is correct
 {
@@ -199,24 +206,22 @@ function draw_table($sql)
 	error_reporting(E_ALL);
 }
 
-
-function show_branches()
+function show_branches($out=true)
 {
 	$sql = 'select * from branches';
 	$conn = oracle_connect();
 	error_reporting(0);
 	$statement = oci_parse($conn, $sql);
 	oci_execute($statement);
-	echo '<table border="1" width="100%"> ';
 	while($row = oci_fetch_assoc($statement))
 	{
-		echo "<tr>";
-			echo "<td>";
-			echo '<a href="/viewbranch.php?branch_id='.$row['BRANCH_ID'].'">'.$row['BRANCH_NAME'].'</a>';
-			echo "</td>";
-		echo "</tr>";
+		if ($out)
+			echo '<div class="branch"><a href="/viewbranch.php?branch_id='.$row['BRANCH_ID'].'">'.$row['BRANCH_NAME'].'</a></div>';
+		else
+			$result .= '<div class="branch"><a href="/viewbranch.php?branch_id='.$row['BRANCH_ID'].'">'.$row['BRANCH_NAME'].'</a></div>';
 	}
-	echo " </table>";
+	if (!$out)
+		return $result;
 	error_reporting(E_ALL);
 }
 
@@ -227,16 +232,14 @@ function show_topics($branch_id)
 	error_reporting(0);
 	$statement = oci_parse($conn, $sql);
 	oci_execute($statement);
-	echo '<table border="1" width="100%"> ';
 	while($row = oci_fetch_assoc($statement))
 	{
-		echo "<tr>";
-			echo "<td>";
+		
+			echo '<div class="topic">';
 			echo '<a href="/viewtopic.php?topic_id='.$row['TOPIC_ID'].'">'.$row['TOPIC_NAME'].'</a>';
-			echo "</td>";
-		echo "</tr>";
+			echo "</div>";
+		
 	}
-	echo " </table>";
 	error_reporting(E_ALL);
 }
 function show_all_messages($topic_id)
@@ -250,10 +253,28 @@ function show_all_messages($topic_id)
 	while($row = oci_fetch_assoc($statement))
 	{
 		show_message($row['MSG_ID']);
-		//echo '<a href="/viewtopic.php?topic_id='.$row['TOPIC_ID'].'">'.$row['TOPIC_NAME'].'</a>';
 	}
 	echo " </table>";
 	error_reporting(E_ALL);
 }
+function show_stats($out = true)
+{
+	$sql = 'select count(*) from messages';
+	$st = open_statement($sql);
+	$row = oci_fetch_assoc($st);
+	//$str = '<div>';
+	$str = 'Total messages :'.$row['COUNT(*)'];
+	//$str .= '</div>';
+	if ($out) echo $str;
+	else return $str;
+}
 
+function show_menu()
+{
+	$result = '<div class="menu-left" >';
+	$result .= 'Menu';
+	$result .= show_branches(false);  //disable direct output in show_branches
+	$result .= '</div> ';
+	echo $result;
+}
 ?>

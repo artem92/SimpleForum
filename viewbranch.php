@@ -1,22 +1,10 @@
 <?php 
-ini_set('display_errors',1);
-error_reporting(E_ALL);
-session_start(); 
-
-
 require_once('forum.config');
 require_once('engine.php');
-if (!isset($_SESSION['user_id']));
-	if (((!isset($_POST['login']) or !isset($_POST['password']))) and !guest_access)
-	{
-		header('Refresh: 2; URL=http://simpleforum/login.php');
-		echo 'Guest users are not allowed. ';
-		echo 'You will be redirected to login page in 2 sec...';
-		exit;
-	}
-	else 
-	if (!(!isset($_POST['login']) or !isset($_POST['password'])))
-		$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
+require_once('content.php');
+insert_standart_header();
+
+
 ?>
 <!-- header -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -34,22 +22,22 @@ if (!isset($_SESSION['user_id']));
     <div class="document" >
         <div class="left-column">
             <!-- Place your left column content here-->
-            <? show_left_menu(); ?>
+            <? viewbranch_show_left(); ?>
         </div>
         <div class="right-column">
            <!-- Place your right column content here-->
-           <? show_login_window(); ?>
+           <? viewbranch_show_right(); ?>
         </div>
         <div class="center-column">
       		<!-- Place your center column content here-->
             <?
-			show_topics($_GET['branch_id']);
+			viewbranch_show_center();
 			?>
     	</div>
     </div>
     <div style="clear:both"></div> 
     <div>
-    <? show_bottom(); ?>
+    <? show_bottom(); ?> 
     </div>
 </div>
 
