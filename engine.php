@@ -49,7 +49,7 @@ function get_user_id($login, $password)
 function get_message($message_id)
 {
 	$conn = oracle_connect();
-	$sql = 'alter session set nls_date_format = \'DD/MM/YYYY HH24:MI:SS\'';
+	$sql = 'alter session set nls_date_format = \'DD/MM/YYYY HH24:MI\'';
 	$st = oci_parse($conn,$sql);
 	if (oci_execute($st))
 	{
@@ -311,11 +311,19 @@ function show_add_message()
 	}
 }
 
+function is_valid_message($s) //to check if string, entered as a message, is valid to post
+{
+	$b = array();
+	$ret = true;
+	if (!((isset($s))&&(strlen($s)!=preg_match_all('/\s/',$s,$b)))) $ret=false;
+	return $ret;
+}
+
 function add_message()
 {
+	
 	if ((isset($_POST['lets_post']))
-	&&(isset($_POST['msg_text']))
-	&&($_POST['msg_text']!=''))
+	&&(is_valid_message($_POST['msg_text'])))
 	{	
 		$msg_text = $_POST['msg_text'];
 		$user_id = $_SESSION['user_id'];
