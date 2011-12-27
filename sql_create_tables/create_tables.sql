@@ -31,6 +31,7 @@ USER_ID number primary key,
 USERNAME varchar2(200) unique not null,
 PASSWORD varchar2(200) not null,
 INFO varchar2 (300),
+EMAIL varchar2(200),
 ACCESS_LEVEL varchar2(20) default 'simple_user',
 PROFILE_VISIBILITY varchar2(20) default 'public');
 
