@@ -1,15 +1,9 @@
 <?php 
-//ini_set('display_errors',1);
-//error_reporting(E_ALL);
-session_start();
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+session_start(); 
 
-if (isset($_GET['action']))
-{
-	if ($_GET['action']=='logout')
-	{
-		session_unset();
-	}
-}
+
 require_once('forum.config');
 require_once('engine.php');
 if (!isset($_SESSION['user_id']));
@@ -23,15 +17,13 @@ if (!isset($_SESSION['user_id']));
 	else 
 	if (!(!isset($_POST['login']) or !isset($_POST['password'])))
 		$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
-
-
 ?>
 <!-- header -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>SimpleForum</TITLE>
+<title>SimpleForum</TITLE>
      <link href="CSS/Default.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -51,7 +43,7 @@ if (!isset($_SESSION['user_id']));
         <div class="center-column">
       		<!-- Place your center column content here-->
             <?
-			show_branches();
+			show_all_messages($_GET['topic_id']);
 			?>
     	</div>
     </div>

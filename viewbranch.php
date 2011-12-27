@@ -2,18 +2,11 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 session_start(); 
-define ('username','melhior');
-define ('password','pass');
-define ('db','10.108.1.214/XE');
-define ('ora_home','C:\oraclexe\app\oracle\product\10.2.0\server');
-define ('tns_admin','C:\oraclexe\app\oracle\product\10.2.0\server\NETWORK\ADMIN');
-define('guest_access', true);
-define('css','/CSS/Default.css');
 
-//require_once('forum.config');
-//require_once('/tools/oracle.conf.php');
+
+require_once('forum.config');
 require_once('engine.php');
-if (!isset($_SESSION['user_id']))
+if (!isset($_SESSION['user_id']));
 	if (((!isset($_POST['login']) or !isset($_POST['password']))) and !guest_access)
 	{
 		header('Refresh: 2; URL=http://simpleforum/login.php');
@@ -22,9 +15,7 @@ if (!isset($_SESSION['user_id']))
 		exit;
 	}
 	else 
-	if (!isset($_POST['login']) or !isset($_POST['password']))
-		$_SESSION['user_id'] = -1;
-	else
+	if (!(!isset($_POST['login']) or !isset($_POST['password'])))
 		$_SESSION['user_id'] = get_user_id($_POST['login'], $_POST['password']);
 ?>
 <!-- header -->
@@ -52,7 +43,7 @@ if (!isset($_SESSION['user_id']))
         <div class="center-column">
       		<!-- Place your center column content here-->
             <?
-			show_branches();
+			show_topics($_GET['branch_id']);
 			?>
     	</div>
     </div>

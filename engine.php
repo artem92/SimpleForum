@@ -71,7 +71,8 @@ function show_message($message_id)
 {
 	$msg = get_message($message_id);
 	$result = '<div class="message" >';
-	$result .= '<div class="post-header" >User '.$msg['USER_ID'].' posted on '.$msg['MSG_TIME'].'</div> <hr>';
+	$userinfo = get_user_info($msg['USER_ID']);
+	$result .= '<div class="post-header" >User '.$userinfo['USERNAME'].' posted on '.$msg['MSG_TIME'].'</div> <hr>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
 	
@@ -88,7 +89,7 @@ function show_left_menu()
 function show_login_window()
 {
 	$str = ' <div class="profile-auth">';
-	if ($_SESSION['user_id']<0 or !isset($_SESSION['user_id']) )
+	if (!isset($_SESSION['user_id']))
 		{ 
 		$str .= 'Please login with your login and password:
 			<hr />
@@ -105,6 +106,7 @@ function show_login_window()
 						</td></tr>
 				<tr><td align="left" colspan="2">
 				<a href="registration.php">Not Registered?</a>
+				
 				</td> </tr>
 			</table>
 			</form> ';
@@ -113,6 +115,8 @@ function show_login_window()
 		{
 			$info = get_user_info($_SESSION['user_id']);
 			$str .= "Hello, ".$info['USERNAME']; //using oracle style names (fetched from database)
+			$str .= '<form action="index.php" method="get"><input name="action" type="submit" value="logout" /></form>';
+			
 		}
 	$str .= '</div>';
 	echo $str;
@@ -136,7 +140,8 @@ function get_user_info($user_id)
 function show_header()
 {
 	$str = '<div class="header">
-			Hello world
+			<a href="index.php">SimpleForum Home</a>
+			<a href="tools/table_util/index.php">Admin Page</a>
 		</div>';
 echo $str;
 }
@@ -215,6 +220,40 @@ function show_branches()
 	error_reporting(E_ALL);
 }
 
-
+function show_topics($branch_id)
+{
+	$sql = 'select * from topics where branch_id='.$branch_id;
+	$conn = oracle_connect();
+	error_reporting(0);
+	$statement = oci_parse($conn, $sql);
+	oci_execute($statement);
+	echo '<table border="1" width="100%"> ';
+	while($row = oci_fetch_assoc($statement))
+	{
+		echo "<tr>";
+			echo "<td>";
+			echo '<a href="/viewtopic.php?topic_id='.$row['TOPIC_ID'].'">'.$row['TOPIC_NAME'].'</a>';
+			echo "</td>";
+		echo "</tr>";
+	}
+	echo " </table>";
+	error_reporting(E_ALL);
+}
+function show_all_messages($topic_id)
+{
+	$sql = 'select * from messages where topic_id='.$topic_id;
+	$conn = oracle_connect();
+	error_reporting(0);
+	$statement = oci_parse($conn, $sql);
+	oci_execute($statement);
+	echo '<table border="1" width="100%"> ';
+	while($row = oci_fetch_assoc($statement))
+	{
+		show_message($row['MSG_ID']);
+		//echo '<a href="/viewtopic.php?topic_id='.$row['TOPIC_ID'].'">'.$row['TOPIC_NAME'].'</a>';
+	}
+	echo " </table>";
+	error_reporting(E_ALL);
+}
 
 ?>
