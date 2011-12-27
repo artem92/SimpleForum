@@ -166,7 +166,7 @@ function profile_show_right()
 }
 
 
-////////////////////////////////////Index section///////////////////////////////////////////////
+//////////////////////////////////// adminpage section ///////////////////////////////////////////////
 function adminpage_show_top()
 {
 	$str = '<div class="top">'.show_adminpage_path().'
@@ -181,7 +181,7 @@ function adminpage_show_left()
 }
 function adminpage_show_center()
 {
-	show_branches();
+	
 }
 function adminpage_show_right()
 {
