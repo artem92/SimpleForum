@@ -38,6 +38,7 @@ div { /* border-style:groove; */}
 .message {
 	padding:0px;
 	border-style:groove;
+	margin-bottom:10px;
 }
 
 .login_window {
