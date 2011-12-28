@@ -73,19 +73,71 @@ function show_add_topic()
 {
 	if (isset($_SESSION['user_id']))
 	{
-		echo '<center>';
-		echo '<form action ="'.$_SERVER['PHP_SELF'].'?topic_id='.$_GET['topic_id'].'" method = "POST">';
-		echo '<h4>Enter your message:</h4>';
-		echo '<textarea rows = "10" cols = "60" name = "msg_text" class = "textarea"></textarea>';
+//		echo '<center>';
+		echo '<form action ="'.$_SERVER['PHP_SELF'].'?branch_id='.$_GET['branch_id'].'" method = "POST">';
+		echo 'Add new topic:';
+		echo '<textarea rows = "1" cols = "80" name = "topic_name" class = "textarea"></textarea>';
 		echo '<br />';
 		echo '<input type = "hidden" name = "lets_post" value = "true">';
-		echo '<input type = "submit" value = "Post message">';
+		echo '<input type = "submit" value = "Start topic">';
 		echo '</form>';
-		echo '</center>';
+//		echo '</center>';
+		
 	}
 	else 
 	{
-		echo '<h4>You can\'t leave messages, as you\'re a guest.</h4><br />';;
+		echo '<h4>You can\'t start topics, as you\'re a guest.</h4><br />';;
+	}
+}
+
+function is_valid_topic($s) //to check if string, entered as a topic, is valid to post
+{
+	$b = array();
+	$ret = true;
+	if (!((isset($s))&&(strlen($s)!=preg_match_all('/\s/',$s,$b)))) $ret=false;
+	return $ret;
+}
+
+
+function add_topic()
+{
+	
+	if ((isset($_POST['lets_post']))
+	&&(is_valid_topic($_POST['topic_name'])))
+	{	
+		$topic_name = $_POST['topic_name'];
+		$user_id = $_SESSION['user_id'];
+		$branch_id= $_GET['branch_id'];
+		$sql = 'insert into TOPICS(TOPIC_NAME,USER_ID,BRANCH_ID)	values (\''.
+		$topic_name.'\','.
+		$user_id.','.
+		$branch_id.')';
+		//echo $sql;
+		
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			//echo 'succesfully connected';
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			if ($r)
+			{
+				//success
+				echo '<h3>Your topic added successfully!</h3>';
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
 	}
 }
 

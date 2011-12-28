@@ -82,7 +82,7 @@ function show_message($message_id)
 	$result = '<div class="message" >';
 	$userinfo = get_user_info($msg['USER_ID']);
 	$result .= '<div class="post-header">'.
-	'<div class="post-header-right" >User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'].'</div> </div>';
+	'User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'].' </div>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
 	echo $result;
@@ -247,14 +247,27 @@ function show_topics($branch_id)
 	error_reporting(0);
 	$statement = oci_parse($conn, $sql);
 	oci_execute($statement);
+	echo '<table class = "viewtopics">';
+	echo '<tr> <td class="cell"> Topic </td> <td class="cell"> Author</td><td>Messages</td>';
+			echo '</tr>';
+	
+	
 	while($row = oci_fetch_assoc($statement))
 	{
-		
+			echo '<tr> <td class="cell">';
 			echo '<div class="topic">';
 			echo '<a href="/viewtopic.php?topic_id='.$row['TOPIC_ID'].'">'.$row['TOPIC_NAME'].'</a>';
-			echo "</div>";
-		
+			echo "</div>";	
+			echo '</td class="cell">';
+			
+			echo '<td class="cell">';
+			echo '</td>';
+			echo '<td class="cell">';
+			echo '</td>';
+			echo '</tr>';
+			
 	}
+	echo '</table>';
 	error_reporting(E_ALL);
 }
 function show_all_messages($topic_id)
@@ -327,6 +340,7 @@ function add_message()
 	if ((isset($_POST['lets_post']))
 	&&(is_valid_message($_POST['msg_text'])))
 	{	
+		unset($_POST['lets_post']); //if we reload page, new post will not be added
 		$msg_text = $_POST['msg_text'];
 		$user_id = $_SESSION['user_id'];
 		$topic_id = $_GET['topic_id'];
@@ -341,7 +355,7 @@ function add_message()
 		PutEnv('TNS_ADMIN = '.tns_admin);
 		if ($c = oci_new_connect(username,password,db)) 
 		{
-			echo 'succesfully connected';
+			//echo 'succesfully connected';
 			$st = oci_parse($c,$sql);
 			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
 			if ($r)

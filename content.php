@@ -57,7 +57,9 @@ function viewbranch_show_left()
 }
 function viewbranch_show_center()
 {
+	add_topic();
 	show_topics($_GET['branch_id']);
+	show_add_topic();
 }
 function viewbranch_show_right()
 {
