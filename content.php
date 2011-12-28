@@ -199,4 +199,26 @@ function sitemap_show_center()
 	show_sitemap();
 }
 
+////////////////////////////////// guestbook! ////////////////////////////////////////
+function guestbook_show_top()
+{
+	$str = '<div class="top">'.show_adminpage_path().'
+		</div>';
+	echo $str;
+}
+
+
+function guestbook_show_left()
+{
+	show_menu();
+}
+function guestbook_show_center()
+{
+	show_guestbook();
+}
+function guestbook_show_right()
+{
+	 show_login_window();
+}
+
 ?>

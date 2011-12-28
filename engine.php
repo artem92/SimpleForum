@@ -330,6 +330,7 @@ function show_topics($branch_id)
 	}
 	error_reporting(E_ALL);
 }
+
 function show_all_messages($topic_id)
 {
 	$sql = 'select * from messages where topic_id='.$topic_id;
@@ -345,6 +346,7 @@ function show_all_messages($topic_id)
 	//echo " </table>";
 	error_reporting(E_ALL);
 }
+
 function show_stats($out = true)
 {
 	$sql = 'select count(*) from messages';
@@ -983,6 +985,110 @@ function show_adminpage()
 		}
 	}
 	else echo '<h4>This page is for administrators of the forum only!</h4>';
+}
+
+function show_all_guestbook_msgs()
+{
+	$viewerinfo = get_user_info($_SESSION['user_id']);
+	PutEnv('ORACLE_SID = XE');
+	PutEnv('ORACLE_HOME = '.ora_home);
+	PutEnv('TNS_ADMIN = '.tns_admin);
+	
+	error_reporting(0);
+	
+	if ($conn = oci_new_connect(username,password,db)) 
+	{
+		$sql = 'select * from GUESTBOOK';
+		$statement = oci_parse($conn, $sql);
+		if (oci_execute($statement))
+		{
+		while($msg = oci_fetch_assoc($statement))
+		{
+			 $result = '<div class="message" >';
+			 $result .= '<div class="post-header">'.
+			 'User \''.$msg['GUEST_NAME'].'\' posted on '.$msg['GUEST_MSG_TIME'];
+			 
+			 if ($viewerinfo['ACCESS_LEVEL']=='admin')
+			 $result .= '<a href="'.$_SERVER['PHP_SELF'].'?action=delete&guest_msg_id='.$msg['GUEST_MSG_ID'].'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" />delete message</a>';
+			  
+			 $result .=' </div>';
+			 $result .='<div class="post-content" > '.$msg['GUEST_MSG_TEXT'].' </div>';
+			 $result .='</div>';
+			 echo $result;
+		}	
+		}
+		else 
+		{
+			$err = oci_error($st);
+			echo $err['message'].'<br />';
+		}
+	}
+	else 
+	{
+		$err = oci_error($c);
+		echo $err['message'].'<br />';
+	}
+	
+	error_reporting(E_ALL);
+}
+
+function show_guestbook()
+{
+	echo '<h3>Welcome to the SimpleForum guestbook!</h3> 
+	<h4>Here you can leave your message to let us know what\'s wrong (or fine) with the forum, so we can improve our service.</h4>';
+	
+	if ((is_valid_message($_POST['message']))&&
+	(is_valid_usrnm_or_pw($_POST['guestname']))&&
+	(isset($_POST['lets_submit'])))
+	{	
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		
+		error_reporting(0);
+		
+		if ($conn = oci_new_connect(username,password,db)) 
+		{
+			$sql = 'insert into GUESTBOOK (GUEST_NAME,GUEST_MSG_TEXT) values (\''.
+			$_POST['guestname'].'\',\''.
+			$_POST['message'].'\')';
+			echo $sql;
+			$statement = oci_parse($conn, $sql);
+			if (oci_execute($statement,OCI_COMMIT_ON_SUCCESS))
+			{
+				//success!
+			}	
+			else 
+			{
+				$err = oci_error($statement);
+				echo $err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo $err['message'].'<br />';
+		}
+		
+		error_reporting(E_ALL);
+	}
+	show_all_guestbook_msgs();
+	
+	echo '<h4>(Note, that your name should consist only of latin letters, 
+	numbers and underscores ("_") in any sequence. A reply should not be empty.)</h4>';
+	echo '<form action = '.$_SERVER['PHP_SELF'].' method = "POST">
+		<table border="0">
+		<tr>
+			<td>Your name: </td>
+			<td><input name="guestname" type="text" size="20" ></td>
+		</tr>
+		<tr>
+			<td>Your reply: </td>
+			<td><textarea rows = "10" cols = "40" name = "message" class = "textarea"></textarea> </td>
+		</tr>
+		</table>
+		<input type = "submit" name = "lets_submit" value = "Leave a reply">
+		</form>';
 }
 
 ?>
