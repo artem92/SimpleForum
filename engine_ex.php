@@ -263,6 +263,7 @@ function add_branch()
 
 function show_sitemap()
 {
+	echo "<h4> Forum Map </h4>";
 	$conn = oracle_connect();
 	$query = "SELECT NAME, LEVEL
 				FROM OBJECTS
@@ -274,7 +275,7 @@ function show_sitemap()
 	{
 		while ($row = oci_fetch_assoc($st))
 		{
-			for ($i=0; $i<2*$row['LEVEL']; $i++) 
+			for ($i=0; $i<4*$row['LEVEL']; $i++) 
 				echo '&nbsp;';
 			echo $row['NAME'];
 			echo '<br/ >';

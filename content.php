@@ -9,7 +9,7 @@ function show_header()
 			<a href="index.php">SimpleForum Home</a>
 			<a href="adminpage.php">Admin Page</a>
 			<a href="registration.php">Registration</a>
-			<a href="sitemap.php">sitemap.php</a>
+			<a href="sitemap.php">Site Map</a>
 		</div>';
 	echo $str;
 }
@@ -60,6 +60,7 @@ function viewbranch_show_left()
 }
 function viewbranch_show_center()
 {
+	delete_topic();
 	add_topic();
 	show_topics($_GET['branch_id']);
 	show_add_topic();
@@ -86,6 +87,7 @@ function viewtopic_show_center()
 	echo '<h2>This page is not to be used directly!</h2>';
 	else
 	{
+		delete_message();
 		add_message();
 		show_all_messages($_GET['topic_id']);
 		show_add_message();

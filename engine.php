@@ -81,8 +81,13 @@ function show_message($message_id)
 	$msg = get_message($message_id);
 	$result = '<div class="message" >';
 	$userinfo = get_user_info($msg['USER_ID']);
+	$viewerinfo = get_user_info($_SESSION['user_id']);
 	$result .= '<div class="post-header">'.
-	'User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'].' </div>';
+	'User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'];
+	if ($msg['USER_ID'] == $_SESSION['user_id']||$viewerinfo['ACCESS_LEVEL']=='admin')
+		$result .= '<a href="viewtopic.php?topic_id='.$_GET['topic_id'].'&action=delete&msg_id='.$message_id.'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" />delete message</a>';
+		
+	$result .=' </div>';
 	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
 	echo $result;
@@ -251,6 +256,7 @@ function show_branches($out=true)
 
 function show_topics($branch_id)
 {
+	$viewerinfo = get_user_info($_SESSION['user_id']);
 	$sql = 'select * from topics where branch_id='.$branch_id;
 	$conn = oracle_connect();
 	error_reporting(0);
@@ -259,7 +265,9 @@ function show_topics($branch_id)
 	{
 		echo '<table class = "viewtopics">';
 		echo '<tr> <td class="cell"> Topic </td> <td class="cell"> Author</td><td class = "cell">Replies</td><td class = "cell">Last message</td>';
-				echo '</tr>';
+		//if ($row['USER_ID'] == $_SESSION['user_id']||$viewerinfo['ACCESS_LEVEL']=='admin')
+			echo '<td> delete?</td>';
+		echo '</tr>';
 		
 		
 		while($row = oci_fetch_assoc($statement))
@@ -317,6 +325,12 @@ function show_topics($branch_id)
 			//else echo $err['message'];
 			else echo '-';
 			echo '</td>'; 
+			
+			if ($row['USER_ID'] == $_SESSION['user_id']||$viewerinfo['ACCESS_LEVEL']=='admin')
+			{
+				echo '<td class="cell"> <a href="viewbranch.php?branch_id='.$_GET['branch_id'].'&action=delete&topic_id='.$row['TOPIC_ID'].'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" /></a> </td>';
+			}
+			else echo '<td class="cell"></td>';
 			
 			echo '</tr>';
 				
@@ -394,9 +408,75 @@ function is_valid_message($s) //to check if string, entered as a message, is val
 	return $ret;
 }
 
+function delete_message()
+{
+	if (isset($_GET['action'])&&isset($_GET['msg_id'])&&$_GET['action']=='delete')
+	{
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			//echo 'succesfully connected';
+			$sql = 'delete from messages where msg_id='.$_GET['msg_id'];
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			if ($r)
+			{
+				//success
+				echo '<h3>Message was deleted successfully!</h3>';
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
+	}
+}
+
+function delete_topic()
+{
+	if (isset($_GET['action'])&&isset($_GET['topic_id'])&&$_GET['action']=='delete')
+	{
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			//echo 'succesfully connected';
+			$sql = 'delete from messages where topic_id='.$_GET['topic_id'];
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			$sql = 'delete from topics where topic_id='.$_GET['topic_id'];
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			if ($r)
+			{
+				//success
+				echo '<h3>Topic was deleted successfully!</h3>';
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
+	}
+}
+
 function add_message()
 {
-	
 	if ((isset($_POST['lets_post']))
 	&&(is_valid_message($_POST['msg_text'])))
 	{	
