@@ -80,10 +80,15 @@ function show_message($message_id)
 {
 	$msg = get_message($message_id);
 	$result = '<div class="message" >';
+	$viewerinfo = get_user_info($_SESSION['user_id']);
 	$userinfo = get_user_info($msg['USER_ID']);
 	$result .= '<div class="post-header">'.
-	'User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'].' </div>';
-	$result .='<div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
+	'User '.'<a href="profile.php?user_id='.$userinfo['USER_ID'].'">'.$userinfo['USERNAME'].'</a>'.' posted on '.$msg['MSG_TIME'];
+	if ($msg['USER_ID'] == $_SESSION['user_id']||$viewerinfo['ACCESS_LEVEL']=='admin')
+	{
+		$result .= '<a href="viewtopic.php?topic_id='.$_GET['topic_id'].'&action=delete&msg_id='.$message_id.'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" />delete message</a>';
+	}
+	$result .=' </div><div class="post-content" > '.$msg['MSG_TEXT'].' </div>';
 	$result .='</div>';
 	echo $result;
 }
@@ -177,8 +182,9 @@ function get_user_info($user_id)
               WHERE  user_id = ".$user_id;
 	if ($st = oci_parse($conn, $query) and oci_execute($st))
 	{
-		$row = oci_fetch_assoc($st); 
-		return $row;
+		if ($row = oci_fetch_assoc($st))
+			return $row;
+		else return false;
 	}	
 	else 
 		return 'oracle error';
@@ -254,12 +260,15 @@ function show_topics($branch_id)
 	$sql = 'select * from topics where branch_id='.$branch_id;
 	$conn = oracle_connect();
 	error_reporting(0);
+	$viewerinfo = get_user_info($_SESSION['user_id']);
+
 	$statement = oci_parse($conn, $sql);
 	if (oci_execute($statement))
 	{
 		echo '<table class = "viewtopics">';
 		echo '<tr> <td class="cell"> Topic </td> <td class="cell"> Author</td><td class = "cell">Replies</td><td class = "cell">Last message</td>';
-				echo '</tr>';
+		echo '<td> delete?</td>';
+		echo '</tr>';
 		
 		
 		while($row = oci_fetch_assoc($statement))
@@ -317,6 +326,12 @@ function show_topics($branch_id)
 			//else echo $err['message'];
 			else echo '-';
 			echo '</td>'; 
+			
+			if ($row['USER_ID'] == $_SESSION['user_id']||$viewerinfo['ACCESS_LEVEL']=='admin')
+			{
+				echo '<td class="cell"> <a href="viewbranch.php?branch_id='.$_GET['branch_id'].'&action=delete&topic_id='.$row['TOPIC_ID'].'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" /></a> </td>';
+			}
+			else echo '<td class="cell"></td>';
 			
 			echo '</tr>';
 				
@@ -989,7 +1004,8 @@ function show_adminpage()
 
 function show_all_guestbook_msgs()
 {
-	$viewerinfo = get_user_info($_SESSION['user_id']);
+	
+	/*$viewerinfo = get_user_info($_SESSION['user_id']);*/
 	PutEnv('ORACLE_SID = XE');
 	PutEnv('ORACLE_HOME = '.ora_home);
 	PutEnv('TNS_ADMIN = '.tns_admin);
@@ -1008,8 +1024,8 @@ function show_all_guestbook_msgs()
 			 $result .= '<div class="post-header">'.
 			 'User \''.$msg['GUEST_NAME'].'\' posted on '.$msg['GUEST_MSG_TIME'];
 			 
-			 if ($viewerinfo['ACCESS_LEVEL']=='admin')
-			 $result .= '<a href="'.$_SERVER['PHP_SELF'].'?action=delete&guest_msg_id='.$msg['GUEST_MSG_ID'].'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" />delete message</a>';
+			 /*if ($viewerinfo['ACCESS_LEVEL']=='admin')
+			 $result .= '<a href="'.$_SERVER['PHP_SELF'].'?action=delete&guest_msg_id='.$msg['GUEST_MSG_ID'].'"><img src="res/delete_item.gif" width="16" height="16" longdesc="res/delete_item.gif" />delete message</a>';*/
 			  
 			 $result .=' </div>';
 			 $result .='<div class="post-content" > '.$msg['GUEST_MSG_TEXT'].' </div>';
@@ -1090,5 +1106,74 @@ function show_guestbook()
 		<input type = "submit" name = "lets_submit" value = "Leave a reply">
 		</form>';
 }
+
+function delete_message()
+{
+	if (isset($_GET['action'])&&isset($_GET['msg_id'])&&$_GET['action']=='delete')
+	{
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			//echo 'succesfully connected';
+			$sql = 'delete from messages where msg_id='.$_GET['msg_id'];
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			if ($r)
+			{
+				//success
+				echo '<h3>Message was deleted successfully!</h3>';
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
+	}
+}
+
+function delete_topic()
+{
+	if (isset($_GET['action'])&&isset($_GET['topic_id'])&&$_GET['action']=='delete')
+	{
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			//echo 'succesfully connected';
+			$sql = 'delete from messages where topic_id='.$_GET['topic_id'];
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			$sql = 'delete from topics where topic_id='.$_GET['topic_id'];
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_COMMIT_ON_SUCCESS);
+			if ($r)
+			{
+				//success
+				echo '<h3>Topic was deleted successfully!</h3>';
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
+	}
+}
+
+
 
 ?>
