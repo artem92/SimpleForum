@@ -1,6 +1,5 @@
 <?
-	require '../../forum.config';
-	require('oracle_functions.php');
+	require_once('forum.config');
 ?>
 
 <html>
@@ -38,28 +37,11 @@
 			//echo $table;
 			if (isset($table))
 			{
-				if (isset($_POST['username'])) $username = $_POST['username'];
-				else $username = '';
-				if (isset($_POST['password'])) $password = $_POST['password'];
-				else $password = '';
-				if (isset($_POST['db'])) $db = $_POST['db'];
-				else $db = '';
-				if (isset($_POST['ora_home'])) $ora_home = $_POST['ora_home'];
-				else $ora_home = '';
-				if (isset($_POST['tns_admin'])) $tns_admin = $_POST['tns_admin'];
-				else $tns_admin = '';
-				
-				/*echo 'username: '.$username.'<br />';
-				echo 'password: '.$password.'<br />';
-				echo 'db: '.$db.'<br />';
-				echo 'ora_home: '.$ora_home.'<br />';
-				echo 'tns_amdin: '.$tns_admin.'<br />';*/
-				
 				PutEnv('ORACLE_SID = XE');
-				PutEnv('ORACLE_HOME = '.$ora_home);
-				PutEnv('TNS_ADMIN = '.$tns_admin);
+				PutEnv('ORACLE_HOME = '.ora_home);
+				PutEnv('TNS_ADMIN = '.tns_admin);
 				error_reporting(0);
-				if ($c = oci_new_connect($username,$password,$db)) 
+				if ($c = oci_new_connect(username,password,db)) 
 				{
 					error_reporting(E_ALL);
 					//echo 'succesfully connected to orcl!';

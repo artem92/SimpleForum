@@ -12,18 +12,19 @@
 		<center>
 			<h2> Lad work 7 </h2>
 			<h4> (variant 9, by student Kachanovskyy) </h4>
+		<?php
+			echo '
 			<table>
 				<tr>
 					<td>
-						<form action = <? echo $_SERVER[PHP_SELF] ?> method = 'POST'>
+						<form action = '.$_SERVER[PHP_SELF] .' method = "POST">
 							<h3> Enter SQL command to the text field </h3>
 							<h4> (SQL statements should not end with a semi-colon (";"). PL/SQL statements should end with a semi-colon (";").) </h4>
-							<!--<input type = 'text' class = 'inputtext'>-->
-							<textarea rows = '10' cols = '70' name = 'sql' id = 'sql'><? echo $_POST['sql'] ?></textarea>
+							<textarea rows = "10" cols = "70" name = "sql" id = "sql">'.$_POST['sql'].'</textarea>
 							<br />
-							<input type = 'checkbox' name = 'to_commit' value = 'true'>commit after executing
+							<input type = "checkbox" name = "to_commit" value = "true">commit after executing
 							<br /><br />
-							<input type = 'submit' value = 'Execute' style = 'height: 5em; width: 10em;'>
+							<input type = "submit" value = "Execute" style = "height: 5em; width: 10em;">
 						</form>
 					</td>
 				</tr>
@@ -32,8 +33,8 @@
 					</td>
 				</tr>
 			</table>
-		</center>
-		<?php
+			</center>';
+
 			PutEnv('ORACLE_SID = XE');
 			PutEnv('ORACLE_HOME = '.ora_home);
 			PutEnv('TNS_ADMIN = '.tns_admin);
@@ -107,42 +108,17 @@
 				$err = oci_error($c);
 				echo 'Oracle error '.$err['message'];
 			}
-			
-			
-			
+			echo '<form action = "change_table.php" align = "center" method = "POST">
+				<h3> Or select the table to work with it </h3>
+				<select name = "table">
+				<option value = "USERS">USERS</option>
+				<option value = "MESSAGES">MESSAGES</option>
+				<option value = "BRANCHES">BRANCHES</option>
+				<option value = "TOPICS">TOPICS</option>
+				</select>
+				<input type = "hidden" name = "came_from_admin" value = "true">
+				<input type = "submit" value = "OK" style = "width : 5em" >';
 		?>
-		<form action = <? echo table_util_path.'change_table.php' ?> align = 'center' method = 'POST'>
-			<h3> Or select the table to work with it </h3>
-			<select name = 'table'>
-			<?php
-				$st = oci_parse($c,'select * from user_tables');
-				if (oci_execute($st,OCI_DEFAULT))
-				{
-					$row = oci_fetch_assoc($st);
-					if ($row)
-					{
-						$val = $row['TABLE_NAME'];
-						echo '<option value = '.$val.'>'.$val.'</option>';
-						while ($row = oci_fetch_assoc($st))
-						{
-							$val = $row['TABLE_NAME'];
-							echo '<option value = '.$val.'>'.$val.'</option>';
-						}
-					}
-				}
-				else 
-				{
-					$err = oci_error();
-					echo 'Oracle error '.$err['message'];
-				}
-			?>
-			</select>
-			<input type = "hidden" name = "username" value = "<? echo strtoupper(username) ?>">
-			<input type = "hidden" name = "password" value = "<? echo password ?>">
-			<input type = "hidden" name = "db" value = "<? echo db ?>">
-			<input type = "hidden" name = "ora_home" value = "<? echo ora_home ?>">
-			<input type = "hidden" name = "tns_admin" value = "<? echo tns_admin ?>">
-			<input type = 'submit' value = 'OK' style = 'width : 5em' >
 		</form>
 	</body>
 </html>

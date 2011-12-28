@@ -181,7 +181,7 @@ function adminpage_show_left()
 }
 function adminpage_show_center()
 {
-	
+	show_adminpage();
 }
 function adminpage_show_right()
 {
