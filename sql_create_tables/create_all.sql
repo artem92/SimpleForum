@@ -26,6 +26,13 @@ nocache
 nocycle
 nomaxvalue;
 
+create sequence OBJECTS_SEQ
+start with 1
+increment by 1
+nocache
+nocycle
+nomaxvalue;
+
 create table USERS (
 USER_ID number primary key,
 USERNAME varchar2(200) unique not null,
@@ -56,6 +63,13 @@ USER_ID number,
 TOPIC_ID number,
 foreign key (USER_ID) references USERS(USER_ID),
 foreign key (TOPIC_ID) references TOPICS(TOPIC_ID));
+
+create table OBJECTS (
+ID number primary key,
+PID number,
+NAME varchar2(1000) not null,
+SOURCE varchar2(1000)
+);
 
 create or replace trigger USERS_BI 
 before insert on USERS for each row
@@ -103,5 +117,16 @@ begin
 		into :new.MSG_TIME
 		from dual;
    end if;
+end;
+/
+
+create or replace trigger OBJECTS_BI 
+before insert on OBJECTS for each row
+begin
+	if :new.ID is null then
+		select OBJECTS_SEQ.nextval
+		into :new.ID
+		from dual;
+	end if;
 end;
 /

@@ -9,6 +9,7 @@ function show_header()
 			<a href="index.php">SimpleForum Home</a>
 			<a href="adminpage.php">Admin Page</a>
 			<a href="registration.php">Registration</a>
+			<a href="sitemap.php">sitemap.php</a>
 		</div>';
 	echo $str;
 }
@@ -36,7 +37,9 @@ function index_show_left()
 }
 function index_show_center()
 {
+	add_branch();
 	show_branches();
+	show_add_branch();
 }
 function index_show_right()
 {
@@ -190,5 +193,10 @@ function adminpage_show_right()
 	 show_login_window();
 }
 
+/////////////////////////////////////Sitemap//////////////////////////////////////////
+function sitemap_show_center()
+{
+	show_sitemap();
+}
 
 ?>

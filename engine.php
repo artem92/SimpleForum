@@ -824,6 +824,7 @@ function show_adminpage()
 						<option value = "MESSAGES">MESSAGES</option>
 						<option value = "BRANCHES">BRANCHES</option>
 						<option value = "TOPICS">TOPICS</option>
+						<option value = "OBJECTS">OBJECTS</option>
 						</select>
 						<input type = "hidden" name = "admin_id" value = "'.$_SESSION['user_id'].'">
 						<input type = "submit" value = "OK" style = "width : 5em" >
