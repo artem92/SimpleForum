@@ -106,22 +106,10 @@ begin
 end;
 /
 
-create or replace procedure get_author_by_topic_id(in_topic_id in TOPICS.TOPIC_ID%type,
-author out USERS.USERNAME%type,
-author_id out USERS.USER_ID%type
-)
-is 
-begin
-  select USER_ID into author_id from TOPICS
-  where TOPICS.TOPIC_ID = in_topic_id;
-  
-  select USERNAME into author from USERS
-  where USERS.USER_ID = author_id;
-end;
-/
-
 --procedure gets information about topic by topic_id
 create or replace procedure get_info_by_topic_id(in_topic_id in TOPICS.TOPIC_ID%type, 
+author out USERS.USERNAME%type,
+author_id out USERS.USER_ID%type,
 posts_num out number,
 max_user out USERS.USERNAME%type,
 max_user_id out USERS.USER_ID%type,
@@ -156,6 +144,11 @@ begin
   select count(*) into posts_num from MESSAGES
   where MESSAGES.TOPIC_ID = in_topic_id;
   
+  select USER_ID into author_id from TOPICS
+  where TOPICS.TOPIC_ID = in_topic_id;
+  
+  select USERNAME into author from USERS 
+  where USERS.USER_ID = author_id;
 end;
 /
 
