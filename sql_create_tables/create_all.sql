@@ -26,6 +26,13 @@ nocache
 nocycle
 nomaxvalue;
 
+create sequence GUESTBOOK_SEQ
+start with 1
+increment by 1
+nocache
+nocycle
+nomaxvalue;
+
 create table USERS (
 USER_ID number primary key,
 USERNAME varchar2(200) unique not null,
@@ -56,6 +63,14 @@ USER_ID number,
 TOPIC_ID number,
 foreign key (USER_ID) references USERS(USER_ID),
 foreign key (TOPIC_ID) references TOPICS(TOPIC_ID));
+
+create table GUESTBOOK (
+GUEST_MSG_ID number primary key,
+GUEST_NAME varchar2(200) not null,
+GUEST_MSG_TEXT varchar2(4000) not null,
+GUEST_MSG_TIME date not null
+);
+
 
 create or replace trigger USERS_BI 
 before insert on USERS for each row
@@ -101,6 +116,22 @@ begin
 	if :new.MSG_TIME is null then
 		select sysdate 
 		into :new.MSG_TIME
+		from dual;
+   end if;
+end;
+/
+
+create or replace trigger GUESTBOOK_BI
+before insert on GUESTBOOK for each row
+begin
+  if :new.GUEST_MSG_ID is null then 
+    select GUESTBOOK_SEQ.nextval
+    into :NEW.GUEST_MSG_ID
+    from dual;
+  end if;
+  if :new.GUEST_MSG_TIME is null then
+		select sysdate 
+		into :new.GUEST_MSG_TIME
 		from dual;
    end if;
 end;
@@ -160,5 +191,5 @@ end;
 /
 
 
-select * from user_errors
+--select * from user_errors
 

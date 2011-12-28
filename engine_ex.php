@@ -210,7 +210,7 @@ function add_topic()
 		
 		$name = $_POST['topic_name'];
 		$pid= get_branch_obj($_GET['branch_id']);
-		$sql = 'insert into OBJECTS(ID, NAME,PID)	values (OBJECTS_SEQ.nextval,\''.
+		$sql = 'insert into OBJECTS(NAME,PID)	values (\''.
 		$name.'\','.
 		$pid.')';
 		//echo $sql;

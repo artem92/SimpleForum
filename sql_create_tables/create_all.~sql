@@ -26,6 +26,13 @@ nocache
 nocycle
 nomaxvalue;
 
+create sequence GUESTBOOK_SEQ
+start with 1
+increment by 1
+nocache
+nocycle
+nomaxvalue;
+
 create table USERS (
 USER_ID number primary key,
 USERNAME varchar2(200) unique not null,
@@ -56,6 +63,14 @@ USER_ID number,
 TOPIC_ID number,
 foreign key (USER_ID) references USERS(USER_ID),
 foreign key (TOPIC_ID) references TOPICS(TOPIC_ID));
+
+create table GUESTBOOK (
+GUEST_MSG_ID number primary key,
+GUEST_NAME varchar2(200) not null,
+GUEST_MSG_TEXT varchar2(4000) not null,
+GUEST_MSG_TIME date
+);
+
 
 create or replace trigger USERS_BI 
 before insert on USERS for each row
@@ -106,10 +121,38 @@ begin
 end;
 /
 
+create or replace trigger GUESTBOOK_BI
+before insert on GUESTBOOK for each row
+begin
+  if :new.GUEST_MSG_ID is null then 
+    select GUESTBOOK_SEQ.nextval
+    into :NEW.GUEST_MSG_ID
+    from dual;
+  end if;
+  if :new.GUEST_MSG_TIME is null then
+		select sysdate 
+		into :new.GUEST_MSG_TIME
+		from dual;
+   end if;
+end;
+/
+
+create or replace procedure get_author_by_topic_id(in_topic_id in TOPICS.TOPIC_ID%type,
+author out USERS.USERNAME%type,
+author_id out USERS.USER_ID%type
+)
+is 
+begin
+  select USER_ID into author_id from TOPICS
+  where TOPICS.TOPIC_ID = in_topic_id;
+  
+  select USERNAME into author from USERS
+  where USERS.USER_ID = author_id;
+end;
+/
+
 --procedure gets information about topic by topic_id
 create or replace procedure get_info_by_topic_id(in_topic_id in TOPICS.TOPIC_ID%type, 
-author out USERS.USERNAME%type,
-author_id out USERS.USER_ID%type,
 posts_num out number,
 max_user out USERS.USERNAME%type,
 max_user_id out USERS.USER_ID%type,
@@ -144,14 +187,9 @@ begin
   select count(*) into posts_num from MESSAGES
   where MESSAGES.TOPIC_ID = in_topic_id;
   
-  select USER_ID into author_id from TOPICS
-  where TOPICS.TOPIC_ID = in_topic_id;
-  
-  select USERNAME into author from USERS 
-  where USERS.USER_ID = author_id;
 end;
 /
 
 
-select * from user_errors
+--select * from user_errors
 
