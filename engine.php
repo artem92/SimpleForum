@@ -412,6 +412,10 @@ function delete_message()
 {
 	if (isset($_GET['action'])&&isset($_GET['msg_id'])&&$_GET['action']=='delete')
 	{
+		$msg = get_message($_GET['msg_id']);
+		$viewer = get_user_info($_SESSION['user_id']);
+		if ($msg['USER_ID']==$_SESSION['user_id']||$viewer['ACCESS_LEVEL']=='admin')
+		{
 		PutEnv('ORACLE_SID = XE');
 		PutEnv('ORACLE_HOME = '.ora_home);
 		PutEnv('TNS_ADMIN = '.tns_admin);
@@ -437,6 +441,7 @@ function delete_message()
 			$err = oci_error($c);
 			echo 'Oracle error '.$err['message'].'<br />';
 		}
+		}
 	}
 }
 
@@ -444,6 +449,10 @@ function delete_topic()
 {
 	if (isset($_GET['action'])&&isset($_GET['topic_id'])&&$_GET['action']=='delete')
 	{
+		$msg = get_message($_GET['msg_id']);
+		$viewer = get_user_info($_SESSION['user_id']);
+		if ($msg['USER_ID']==$_SESSION['user_id']||$viewer['ACCESS_LEVEL']=='admin')
+		{
 		PutEnv('ORACLE_SID = XE');
 		PutEnv('ORACLE_HOME = '.ora_home);
 		PutEnv('TNS_ADMIN = '.tns_admin);
@@ -471,6 +480,7 @@ function delete_topic()
 		{
 			$err = oci_error($c);
 			echo 'Oracle error '.$err['message'].'<br />';
+		}
 		}
 	}
 }
