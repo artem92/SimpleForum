@@ -128,9 +128,18 @@ function show_login_window()
 	$str = ' <div class="profile-auth">';
 	if (!isset($_SESSION['user_id']))
 		{ 
+		$s = '';
+		$i = 1;
+		foreach($_GET as $key=>$val)
+		{
+			if ($i==1) $s .='?'.$key.'='.$val;
+			else $s .='&'.$key.'='.$val; 
+			$i+=1;
+		}
+			//echo $s;
 		$str .= 'Please login with your login and password:
 			<hr />
-			<form action="index.php" method="post">
+			<form action="'.$_SERVER['PHP_SELF'].$s.'" method="post">
 			<table width="150">
 				<tr><td align="left">Login: </td>
 					<td><input name="login" type="text" size="13" /></td></tr>
@@ -277,12 +286,12 @@ function show_all_messages($topic_id)
 	error_reporting(0);
 	$statement = oci_parse($conn, $sql);
 	oci_execute($statement);
-	echo '<table border="1" width="100%"> ';
+	//echo '<table border="1" width="100%"> ';
 	while($row = oci_fetch_assoc($statement))
 	{
 		show_message($row['MSG_ID']);
 	}
-	echo " </table>";
+	//echo " </table>";
 	error_reporting(E_ALL);
 }
 function show_stats($out = true)
@@ -380,198 +389,198 @@ function add_message()
 function show_profile()
 {
 	$user_id = $_GET['user_id'];	
-					$viewer_id = $_SESSION['user_id'];
-					
-					//$viewer_id = 1;//-temporarily
-					//echo 'viewer/user_id: '.$viewer.'<br />';
-					
-					if (!isset($user_id)) echo '<center><h4>This page is not to be used directly!</h4></center>';
+	$viewer_id = $_SESSION['user_id'];
+	
+	//$viewer_id = 1;//-temporarily
+	//echo 'viewer/user_id: '.$viewer.'<br />';
+	
+	if (!isset($user_id)) echo '<center><h4>This page is not to be used directly!</h4></center>';
+	else 
+	{
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db))
+		{
+			error_reporting(0);
+			$sql = 'select * from USERS where USER_ID = '.$user_id;
+			$st = oci_parse($c,$sql);
+			$r = oci_execute($st,OCI_NO_AUTO_COMMIT);
+			if ($r)
+			{
+				$ar = oci_fetch_assoc($st);
+				//foreach ($ar as $key=>$val) echo $key.': '.$val.'<br />';
+				
+				$sql_t = 'select count(*) as ct from MESSAGES where USER_ID = '.$user_id;
+				$st_t = oci_parse($c,$sql_t);
+				$r_t = oci_execute($st_t,OCI_NO_AUTO_COMMIT);
+				if ($r_t)
+				{
+					$ar_t = oci_fetch_assoc($st_t);
+					$msg_num = $ar_t['CT'];
+				}
+				else
+				{
+					$msg_num = '(database error occured, was not possible to find number of posts)';
+				}
+				
+				
+				
+				if ($user_id!=$viewer_id)
+				{
+					if ($ar['PROFILE_VISIBILITY']=='private') echo '<h4>Sorry, but personal information of this user is private!</h4>';
 					else 
 					{
-						PutEnv('ORACLE_SID = XE');
-						PutEnv('ORACLE_HOME = '.ora_home);
-						PutEnv('TNS_ADMIN = '.tns_admin);
-						if ($c = oci_new_connect(username,password,db))
+						echo '<h4>Username: '.$ar['USERNAME'].'</h4>';
+						echo '<h4>Access level: '.$ar['ACCESS_LEVEL'].'</h4>';
+						echo '<h4>Number of posts: '.$msg_num.'</h4>';
+						echo '<h4>Email: '.$ar['EMAIL'].'</h4>';
+						echo '<h4>Personal information: "'.$ar['INFO'].'"</h4>';
+					}
+				}
+				else
+				{	
+					echo '<h4>Username: '.$ar['USERNAME'].'</h4>';
+					echo '<h4>Access level: '.$ar['ACCESS_LEVEL'].'</h4>';
+					echo '<h4>Number of posts: '.$msg_num.'</h4>';
+					
+					if (isset($_POST['lets_submit']))
+					{
+						if (isset($_POST['email'])) $email = $_POST['email'];
+						else $email = '';
+						
+						if (isset($_POST['info'])) $info = $_POST['info'];
+						else $info = '';
+						
+						if ($_POST['profile_visibility']=='yes') $p_v_yes = 'checked = "yes"';
+						else $p_v_no = 'checked = "yes"';
+					}
+					else 
+					{
+						$email = $ar['EMAIL'];
+						$info = $ar['INFO'];
+						if ($ar['PROFILE_VISIBILITY']=='public') $p_v_yes = 'checked = "yes"';
+						else $p_v_no = 'checked = "yes"';
+					}
+					
+					$s = '<h3>Here you can change your personal information, email and password :</h3>
+					<h4>(Note that all symbols in your username and password should be latin letters, numbers or underscores("_") in any sequence.
+					Username, password and Email should be up to 200 symbols in length, info - up to 4000)</h4>
+					<br />
+					<form action="'.$_SERVER['PHP_SELF'].'?user_id='.$user_id.'" method="post">
+					<table border="0">
+					  <tr>
+						<td>Change password? </td>
+						<td>
+							<input name="change_pw" id = "ch_true" type="radio" value = "yes" onclick = "enable_change_pw();"
+							checked = "yes">Yes<br />
+							<input name="change_pw" id = "ch_false" type="radio" value = "no" onclick = "enable_change_pw();">No
+						</td>
+					  </tr>
+					  <tr>
+						<td>New password: </td>
+						<td><input id = "new_pw" name="new_password" type="password" size="20"></td>
+					  </tr>
+					  <tr>
+						<td>Repeat new password:</td>
+						<td><input id = "r_new_pw" name="repeat_new_password" type="password" size="20" ></td>
+					  </tr>
+					  <tr>
+						<td>Old password:</td>
+						<td><input name="old_password" type="password" size="20" > </td>
+					  </tr>
+					  <tr>
+						<td>Do you let other users to watch your profile?</td>
+						<td>
+							<input name="profile_visibility" type="radio" value = "yes" '.$p_v_yes.'>Yes <br />
+							<input name="profile_visibility" type="radio" value = "no" '.$p_v_no.'>No
+						</td>
+					  </tr>
+					  <tr>
+						<td>Email*: </td>
+						<td><input name="email" type="text" size="20" value = "'.$email.'"></td>
+					  </tr>
+					   <tr>
+						<td>Your personal information*: </td>
+						<td><textarea rows = "10" cols = "40" name = "info" class = "textarea">'.$info.'</textarea> </td>
+					  </tr>
+					</table>
+					(Fields, marked with "*", are not necessary to fill)
+					<br /><br />
+					<input type = "hidden" value = "1" name = "lets_submit">
+					<center><input type = "submit" value = "Submit changes" class="button"></center>';
+					
+					if (isset($_POST['lets_submit']))
+					{
+						if ($_POST['old_password']!=$ar['PASSWORD']) 
+						$s = $s.'<br /><br />
+						<font size = "3" color = "red">
+						You entered wrong old password. Changes weren\'t applied
+						</font>';
+						
+						if (($_POST['change_pw'] == 'yes')
+						&&($_POST['new_password']!=$_POST['repeat_new_password']))
+							$s = $s.'<br /><br />
+						<font size = "3" color = "red">
+						You didn\'t repeat the password correctly. Changes weren\'t applied
+						</font>';
+						
+						if (($_POST['old_password']==$ar['PASSWORD'])&&(($_POST['change_pw'] != 'yes')||
+						(($_POST['change_pw'] == 'yes')&&
+						(is_valid_usrnm_or_pw(array($_POST['new_password'],$_POST['repeat_new_password'])))&&
+						($_POST['new_password']==$_POST['repeat_new_password']))))
 						{
-							error_reporting(0);
-							$sql = 'select * from USERS where USER_ID = '.$user_id;
-							$st = oci_parse($c,$sql);
-							$r = oci_execute($st,OCI_NO_AUTO_COMMIT);
-							if ($r)
+							$info = str_replace('\'','\'\'',$_POST['info']);
+							if (isset($_POST['email'])) $email = str_replace('\'','\'\'',$_POST['email']);
+							else $email = '';
+							$new_password = $_POST['new_password'];
+							if($_POST['profile_visibility']=='yes') $p_v = 'public';
+							else $p_v = 'private';
+							
+							$sql_t = 'update USERS set ';
+							
+							if ($_POST['change_pw']=='yes') $sql_t = $sql_t.'PASSWORD = \''.$new_password.'\',';
+							
+							$sql_t = $sql_t.
+							'INFO = \''.$info.'\',
+							EMAIL = \''.$email.'\',
+							PROFILE_VISIBILITY = \''.$p_v.'\'
+							where USER_ID = '.$user_id;
+							//echo $sql_t;
+							$st_t = oci_parse($c,$sql_t);
+							$r_t = oci_execute($st_t,OCI_COMMIT_ON_SUCCESS);
+							if ($r_t)
 							{
-								$ar = oci_fetch_assoc($st);
-								//foreach ($ar as $key=>$val) echo $key.': '.$val.'<br />';
-								
-								$sql_t = 'select count(*) as ct from MESSAGES where USER_ID = '.$user_id;
-								$st_t = oci_parse($c,$sql_t);
-								$r_t = oci_execute($st_t,OCI_NO_AUTO_COMMIT);
-								if ($r_t)
-								{
-									$ar_t = oci_fetch_assoc($st_t);
-									$msg_num = $ar_t['CT'];
-								}
-								else
-								{
-									$msg_num = '(database error occured, was not possible to find number of posts)';
-								}
-								
-								
-								
-								if ($user_id!=$viewer_id)
-								{
-									if ($ar['PROFILE_VISIBILITY']=='private') echo '<h4>Sorry, but personal information of this user is private!</h4>';
-									else 
-									{
-										echo '<h4>Username: '.$ar['USERNAME'].'</h4>';
-										echo '<h4>Access level: '.$ar['ACCESS_LEVEL'].'</h4>';
-										echo '<h4>Number of posts: '.$msg_num.'</h4>';
-										echo '<h4>Email: '.$ar['EMAIL'].'</h4>';
-										echo '<h4>Personal information: "'.$ar['INFO'].'"</h4>';
-									}
-								}
-								else
-								{	
-									echo '<h4>Username: '.$ar['USERNAME'].'</h4>';
-									echo '<h4>Access level: '.$ar['ACCESS_LEVEL'].'</h4>';
-									echo '<h4>Number of posts: '.$msg_num.'</h4>';
-									
-									if (isset($_POST['lets_submit']))
-									{
-										if (isset($_POST['email'])) $email = $_POST['email'];
-										else $email = '';
-										
-										if (isset($_POST['info'])) $info = $_POST['info'];
-										else $info = '';
-										
-										if ($_POST['profile_visibility']=='yes') $p_v_yes = 'checked = "yes"';
-										else $p_v_no = 'checked = "yes"';
-									}
-									else 
-									{
-										$email = $ar['EMAIL'];
-										$info = $ar['INFO'];
-										if ($ar['PROFILE_VISIBILITY']=='public') $p_v_yes = 'checked = "yes"';
-										else $p_v_no = 'checked = "yes"';
-									}
-									
-									$s = '<h3>Here you can change your personal information, email and password :</h3>
-									<h4>(Note that all symbols in your username and password should be latin letters, numbers or underscores("_") in any sequence.
-									Username, password and Email should be up to 200 symbols in length, info - up to 4000)</h4>
-									<br />
-									<form action="'.$_SERVER['PHP_SELF'].'?user_id='.$user_id.'" method="post">
-									<table border="0">
-									  <tr>
-										<td>Change password? </td>
-										<td>
-											<input name="change_pw" id = "ch_true" type="radio" value = "yes" onclick = "enable_change_pw();"
-											checked = "yes">Yes<br />
-											<input name="change_pw" id = "ch_false" type="radio" value = "no" onclick = "enable_change_pw();">No
-										</td>
-									  </tr>
-									  <tr>
-										<td>New password: </td>
-										<td><input id = "new_pw" name="new_password" type="password" size="20"></td>
-									  </tr>
-									  <tr>
-										<td>Repeat new password:</td>
-										<td><input id = "r_new_pw" name="repeat_new_password" type="password" size="20" ></td>
-									  </tr>
-									  <tr>
-										<td>Old password:</td>
-										<td><input name="old_password" type="password" size="20" > </td>
-									  </tr>
-									  <tr>
-										<td>Do you let other users to watch your profile?</td>
-										<td>
-											<input name="profile_visibility" type="radio" value = "yes" '.$p_v_yes.'>Yes <br />
-											<input name="profile_visibility" type="radio" value = "no" '.$p_v_no.'>No
-										</td>
-									  </tr>
-									  <tr>
-										<td>Email*: </td>
-										<td><input name="email" type="text" size="20" value = "'.$email.'"></td>
-									  </tr>
-									   <tr>
-										<td>Your personal information*: </td>
-										<td><textarea rows = "10" cols = "40" name = "info" class = "textarea">'.$info.'</textarea> </td>
-									  </tr>
-									</table>
-									(Fields, marked with "*", are not necessary to fill)
-									<br /><br />
-									<input type = "hidden" value = "1" name = "lets_submit">
-									<center><input type = "submit" value = "Submit changes" class="button"></center>';
-									
-									if (isset($_POST['lets_submit']))
-									{
-										if ($_POST['old_password']!=$ar['PASSWORD']) 
-										$s = $s.'<br /><br />
-										<font size = "3" color = "red">
-										You entered wrong old password. Changes weren\'t applied
-										</font>';
-										
-										if (($_POST['change_pw'] == 'yes')
-										&&($_POST['new_password']!=$_POST['repeat_new_password']))
-											$s = $s.'<br /><br />
-										<font size = "3" color = "red">
-										You didn\'t repeat the password correctly. Changes weren\'t applied
-										</font>';
-										
-										if (($_POST['old_password']==$ar['PASSWORD'])&&(($_POST['change_pw'] != 'yes')||
-										(($_POST['change_pw'] == 'yes')&&
-										(is_valid_usrnm_or_pw(array($_POST['new_password'],$_POST['repeat_new_password'])))&&
-										($_POST['new_password']==$_POST['repeat_new_password']))))
-										{
-											$info = str_replace('\'','\'\'',$_POST['info']);
-											if (isset($_POST['email'])) $email = str_replace('\'','\'\'',$_POST['email']);
-											else $email = '';
-											$new_password = $_POST['new_password'];
-											if($_POST['profile_visibility']=='yes') $p_v = 'public';
-											else $p_v = 'private';
-											
-											$sql_t = 'update USERS set ';
-											
-											if ($_POST['change_pw']=='yes') $sql_t = $sql_t.'PASSWORD = \''.$new_password.'\',';
-											
-											$sql_t = $sql_t.
-											'INFO = \''.$info.'\',
-											EMAIL = \''.$email.'\',
-											PROFILE_VISIBILITY = \''.$p_v.'\'
-											where USER_ID = '.$user_id;
-											//echo $sql_t;
-											$st_t = oci_parse($c,$sql_t);
-											$r_t = oci_execute($st_t,OCI_COMMIT_ON_SUCCESS);
-											if ($r_t)
-											{
-												$s = $s.'<br /><br /><font size = "3" color = "green">
-												Changes applied successfully!
-												</font>';
-											}
-											else
-											{
-												$s = $s.'<br /><br /><font size = "3" color = "red">
-												Database error occured, changes weren\'t applied
-												</font>';
-											}
-										}
-									}
-									echo $s;
-									echo '</form>';
-								}
+								$s = $s.'<br /><br /><font size = "3" color = "green">
+								Changes applied successfully!
+								</font>';
 							}
-							else 
+							else
 							{
-								$err = oci_error($st);
-								echo $err['message'];
+								$s = $s.'<br /><br /><font size = "3" color = "red">
+								Database error occured, changes weren\'t applied
+								</font>';
 							}
-							oci_free_statement($st);
-							error_reporting(E_ALL);
-						}	
-						else
-						{
-							//$err = oci_error($c);
-							echo 'Could not connect to database';
 						}
 					}
+					echo $s;
+					echo '</form>';
+				}
+			}
+			else 
+			{
+				$err = oci_error($st);
+				echo $err['message'];
+			}
+			oci_free_statement($st);
+			error_reporting(E_ALL);
+		}	
+		else
+		{
+			//$err = oci_error($c);
+			echo 'Could not connect to database';
+		}
+	}
 }
 function show_registration()
 	{
@@ -684,5 +693,244 @@ function show_registration()
 		};
             
 	}
+
+///////////////////////////////////////////  from table util ///////////////////////////////////////////////////
+//gets all values from table associatively
+function get_table_content($c,$table)
+{
+	$ar = array();
+	$sql = 'select t.*,rowidtochar(t.rowid) as t_rowid from '.$table.' t';
+	$st = oci_parse($c,$sql);
+	error_reporting(0);
+	if (oci_execute($st))
+	{
+		while ($row = oci_fetch_assoc($st))
+		{
+			$ar[] = $row;
+		}
+	}
+	else 
+	{
+		$err = oci_error($st);
+		echo 'Oracle error '.$err['message'];
+	}
+	oci_free_statement($st);
+	error_reporting(E_ALL);
+	return $ar;
+}
+
+//function returns associative array with names of "native" tables and columns
+//for foreign keys of given table
+function get_foreign_keys($c,//connection
+$table,//table name
+$username)
+{
+	$res_ar = array();
+	$sql = 'select B.TABLE_NAME,
+	B.COLUMN_NAME
+	from SYS.ALL_CONSTRAINTS A,
+	SYS.ALL_CONS_COLUMNS B
+	where A.OWNER = \''.$username.'\'
+	and B.OWNER = \''.$username.'\'
+	and A.R_CONSTRAINT_NAME = B.CONSTRAINT_NAME
+	and A.TABLE_NAME = \''.$table.'\'';
+	$stmt = oci_parse($c,$sql);
+	error_reporting(0);
+	if (oci_execute($stmt))
+	{
+		while ($row = oci_fetch_assoc($stmt)) 
+		{
+			$tb_content = get_table_content($c,$row['TABLE_NAME']);
+			$res_ar[] = array('column_name' => $row['COLUMN_NAME'],'table_name' => $row['TABLE_NAME'],'table_content'=>$tb_content);	
+		}
+	}
+	else 
+	{
+		$err = oci_error($stmt);
+		echo 'Oracle error '.$err['message'];
+	}
+	oci_free_statement($stmt);
+	error_reporting(E_ALL);
+	/*if (count($res_ar)>0) */return $res_ar;
+	/*else return false;*/
+}
+
+
+//gets all columns and their datatypes  
+function get_table_columns($c,$table)
+{
+	$ar = array();
+	$sql = 'select column_name,data_type from user_tab_columns where table_name = \''.$table.'\'';
+	$st = oci_parse($c,$sql);
+	error_reporting(0);
+	if (oci_execute($st))
+	{
+		while ($row = oci_fetch_assoc($st))
+		{
+			$key = $row['COLUMN_NAME'];
+			$val = $row['DATA_TYPE'];
+			$ar[$key] = $val;
+		}
+	}
+	else 
+	{
+		$err = oci_error($st);
+		echo 'Oracle error '.$err['message'];
+	}
+	oci_free_statement($st);
+	error_reporting(E_ALL);
+	return $ar;
+}
+
+//checks if the string contains numeric oracle 10g datatype
+function is_numeric_oracle10g($s)
+{
+	$ret = false;
+	if (($s == 'NUMBER')||($s == 'DECIMAL')||($s == 'DEC')||
+	($s == 'INTEGER')||($s == 'INT')||($s == 'SMALLINT')||
+	($s == 'FLOAT')||($s == 'DOUBLE')||($s == 'REAL'))
+		$ret = true;
+	return $ret;
+}	
+///////////////////////////////////////////  /from table util ///////////////////////////////////////////////////	
+	
+function show_adminpage()
+{
+	if (isset($_SESSION['user_id'])) 
+	{
+		$viewer_id = $_SESSION['user_id'];
+		PutEnv('ORACLE_SID = XE');
+		PutEnv('ORACLE_HOME = '.ora_home);
+		PutEnv('TNS_ADMIN = '.tns_admin);
+		if ($c = oci_new_connect(username,password,db)) 
+		{
+			$sql = 'select ACCESS_LEVEL from USERS where  USER_ID = '.$viewer_id;
+			$st = oci_parse($c,$sql);
+			if (oci_execute($st,OCI_NO_AUTO_COMMIT))
+			{
+				$ar = oci_fetch_assoc($st);
+				$access_level = $ar['ACCESS_LEVEL'];
+				if ($access_level=='admin')
+				{
+					//echo 'success!';
+					echo '<h3>Welcome to the admin page!</h3>';
+					echo '<h4>Here you can use SQL text area to work with database manually, or choose table to work with it using GUI. 
+					Tables are: USERS, BRANCHES, TOPICS, MESSAGES.</h4>';
+					
+					echo '<form action = "change_table.php" method = "POST">
+						<h3> Select the table to work with it </h3>
+						<select name = "table">
+						<option value = "USERS">USERS</option>
+						<option value = "MESSAGES">MESSAGES</option>
+						<option value = "BRANCHES">BRANCHES</option>
+						<option value = "TOPICS">TOPICS</option>
+						</select>
+						<input type = "hidden" name = "admin_id" value = "'.$_SESSION['user_id'].'">
+						<input type = "submit" value = "OK" style = "width : 5em" >
+						</form>';
+					
+					echo '<h3>Or use SQL text area to work with database manually:</h3>';
+					
+					echo '
+					<table>
+						<tr>
+							<td>
+								<form action = '.$_SERVER[PHP_SELF] .' method = "POST">
+									<h4> (SQL statements should not end with a semi-colon (";"). PL/SQL statements should end with a semi-colon (";").) </h4>
+									<textarea rows = "10" cols = "70" name = "sql" id = "sql">'.$_POST['sql'].'</textarea>
+									<br />
+									<input type = "checkbox" name = "to_commit" value = "true">commit after executing
+									<br /><br />
+									<input type = "submit" value = "Execute" style = "height: 5em; width: 10em;">
+								</form>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+						</tr>
+					</table>
+					</center>';
+
+					$to_commit = $_POST['to_commit'];
+					$sql = $_POST['sql'];
+					if (isset($sql)) 
+					{
+						$st = oci_parse($c,$sql);
+						error_reporting(0);
+						$r = oci_execute($st,OCI_NO_AUTO_COMMIT);
+						if ($r)
+						{
+							//echo 'command ran succesfully';
+							//oci_commit($st);
+							
+							if (oci_statement_type($st)=='SELECT')
+							{
+								$row = oci_fetch_assoc($st);
+								if ($row)
+								{
+									echo '<br />';
+									echo '<table border = "2" align = "center">';
+									echo '<tr>';
+									$keys = array_keys($row);
+									foreach ($keys as $key)
+									{
+										echo '<th>';
+										echo $key;
+										echo '</th>';
+									}
+									echo '</tr>';
+									echo '<tr>';
+										foreach($row as $val)
+										{
+											echo '<td>';
+											echo $val;
+											echo '</td>';
+										}
+									echo '</tr>';
+									while ($row = oci_fetch_assoc($st))
+									{
+										echo '<tr>';
+										foreach($row as $val)
+										{
+											echo '<td>';
+											echo $val;
+											echo '</td>';
+										}
+										echo '</tr>';
+									}
+									echo '</table>';
+								}
+							}
+							if ($to_commit == 'true') oci_commit($c);
+						}
+						else 
+						{
+							$err = oci_error($st);
+							echo 'Oracle error '.$err['message'];
+						}
+						oci_free_statement($st);
+						error_reporting(E_ALL);
+					}
+				}
+				else
+				{
+					echo '<h4>This page is for administrators of the forum only!</h4>';
+				}
+			}
+			else
+			{
+				$err = oci_error($st);
+				echo 'Oracle error '.$err['message'].'<br />';
+			}
+		}
+		else 
+		{
+			$err = oci_error($c);
+			echo 'Oracle error '.$err['message'].'<br />';
+		}
+	}
+	else echo '<h4>This page is for administrators of the forum only!</h4>';
+}
 
 ?>
