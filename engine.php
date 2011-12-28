@@ -883,7 +883,7 @@ function show_adminpage()
 					//echo 'success!';
 					echo '<h3>Welcome to the admin page!</h3>';
 					echo '<h4>Here you can use SQL text area to work with database manually, or choose table to work with it using GUI. 
-					Tables are: USERS, BRANCHES, TOPICS, MESSAGES.</h4>';
+					Tables are: USERS, BRANCHES, TOPICS, MESSAGES, GUESTBOOK.</h4>';
 					
 					echo '<form action = "change_table.php" method = "POST">
 						<h3> Select the table to work with it </h3>
@@ -892,7 +892,7 @@ function show_adminpage()
 						<option value = "MESSAGES">MESSAGES</option>
 						<option value = "BRANCHES">BRANCHES</option>
 						<option value = "TOPICS">TOPICS</option>
-						<option value = "OBJECTS">OBJECTS</option>
+						<option value = "GUESTBOOK">GUESTBOOK</option>
 						</select>
 						<input type = "hidden" name = "admin_id" value = "'.$_SESSION['user_id'].'">
 						<input type = "submit" value = "OK" style = "width : 5em" >
