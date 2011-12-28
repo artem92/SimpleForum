@@ -3,13 +3,21 @@
 //This functions actualy provide an output (echo), so called as procedures
 
 ///////////////////////////////////ALL Site section/////////////////////////////////////////////
+function show_top()
+{
+	$str = '<div class="head"> <h1> Simple Forum </h1>
+		</div>';
+	echo $str;
+}
+
 function show_header()
 {
-	$str = '<div class="header">
-			<a href="index.php">SimpleForum Home</a>
-			<a href="adminpage.php">Admin Page</a>
-			<a href="registration.php">Registration</a>
-			<a href="sitemap.php">Site Map</a>
+	$str = '<div class="header"> <table width = 50%> <tr>
+			<td><a href="index.php">SimpleForum Home</a></td>
+			<td><a href="adminpage.php">Admin Page</a></td>
+			<td><a href="registration.php">Registration</a></td>
+			<td><a href="sitemap.php">Site Map</a></td>
+			</table></tr>
 		</div>';
 	echo $str;
 }

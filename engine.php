@@ -1174,6 +1174,4 @@ function delete_topic()
 	}
 }
 
-
-
 ?>

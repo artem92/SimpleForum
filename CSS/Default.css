@@ -1,11 +1,33 @@
 /* CSS Document */
 /* Containers*/
+body
+{
+	font:sans-serif;
+}
+
 .left-column {width:200px; float: left;  /*border-style:groove; */ }
 .right-column {	float:right; width:220px; /* border-style:groove; */}
 div {  border-style:none; }
 .center-column { margin-left:220px; margin-right:225px;  /*border-style:groove; */}
-.header {height:85px; 	border-style:solid; border-width:thin; clear:both; margin-bottom:5px; }
-.top {height:85px; border-style:solid; border-width:thin; clear:both; margin-bottom:5px; }
+.header {height:25px; 	border-style:solid; border-width:thin; clear:both; margin-bottom:5px; border-collapse: collapse }
+
+
+.head {height:50px;  
+background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#999));  
+ border-style:solid; border-width:thin; clear:both; margin-bottom:0px;  
+ vertical-align:text-top;
+ border-collapse: collapse;
+padding: 10px;
+}
+
+
+.top {height:50px; border-style:solid; border-width:thin; clear:both; margin-bottom:5px; background-color:#6FC; ; }
+h1
+{
+	font:sans-serif;
+	color:#FFF;
+}
+
 .bottom { padding:10px; border-style:solid; border-width:thin;clear:both; margin-top:5px}
 .document {}
 

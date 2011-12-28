@@ -17,7 +17,8 @@ insert_standart_header();
 <body>
 <div style="width:90%; margin-left:5%; ">
     <div >
-    <? show_header(); 
+    <?  show_top();
+	show_header(); 
 	   index_show_top();
 	?>
     </div>
