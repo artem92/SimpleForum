@@ -255,28 +255,79 @@ function show_topics($branch_id)
 	$conn = oracle_connect();
 	error_reporting(0);
 	$statement = oci_parse($conn, $sql);
-	oci_execute($statement);
-	echo '<table class = "viewtopics">';
-	echo '<tr> <td class="cell"> Topic </td> <td class="cell"> Author</td><td>Messages</td>';
-			echo '</tr>';
-	
-	
-	while($row = oci_fetch_assoc($statement))
+	if (oci_execute($statement))
 	{
+		echo '<table class = "viewtopics">';
+		echo '<tr> <td class="cell"> Topic </td> <td class="cell"> Author</td><td class = "cell">Replies</td><td class = "cell">Last message</td>';
+				echo '</tr>';
+		
+		
+		while($row = oci_fetch_assoc($statement))
+		{
 			echo '<tr> <td class="cell">';
 			echo '<div class="topic">';
 			echo '<a href="/viewtopic.php?topic_id='.$row['TOPIC_ID'].'">'.$row['TOPIC_NAME'].'</a>';
 			echo "</div>";	
 			echo '</td class="cell">';
 			
-			echo '<td class="cell">';
-			echo '</td>';
-			echo '<td class="cell">';
-			echo '</td>';
-			echo '</tr>';
+			$sql = 'alter session set nls_date_format = \'DD/MM/YYYY HH24:MI\'';
+			$st = oci_parse($conn,$sql);
+			if (oci_execute($st))
+			{
+				//success
+			}
 			
+			
+			$in_var = $row['TOPIC_ID'];
+			
+			$sql = 'begin get_author_by_topic_id(:in_topic_id,:out_author,:out_author_id); end;';
+			$st = oci_parse($conn,$sql);
+			oci_bind_by_name($st,':in_topic_id',$in_var); 
+			oci_bind_by_name($st,':out_author',$out_author,256);
+			oci_bind_by_name($st,':out_author_id',$out_author_id,-1,SQLT_INT);
+			$r_author = oci_execute($st);
+			$err_author = oci_error($st);
+			
+			$sql = 'begin get_info_by_topic_id(:in_topic_id,:out_posts_num,:out_max_user,:out_max_user_id,:out_max_date); end;';
+			$in_var = $row['TOPIC_ID'];
+			$st = oci_parse($conn,$sql);
+			oci_bind_by_name($st,':in_topic_id',$in_var); 
+			oci_bind_by_name($st,':out_posts_num',$out_posts_num,-1,SQLT_INT);
+			oci_bind_by_name($st,':out_max_user',$out_max_user,256);
+			oci_bind_by_name($st,':out_max_user_id',$out_max_user_id,-1,SQLT_INT);
+			oci_bind_by_name($st,':out_max_date',$out_max_date,256);
+			$r = oci_execute($st);
+			$err = oci_error($st);
+			
+			echo '<td class="cell">';
+			if ($r_author) echo '<a href="/profile.php?user_id='.$out_author_id.'">'.$out_author.'</a>';
+			else echo $err_author['message'];
+			
+			echo '</td>';
+			
+			echo '<td class="cell">';
+			if ($r) echo $out_posts_num;
+			//else echo $err['message'];
+			else echo '-';
+			echo '</td>';
+			
+
+			echo '<td class="cell">';
+			if ($r) echo '<a href="/profile.php?user_id='.$out_max_user_id.'">'.$out_max_user.'</a> <'.$out_max_date.'>';
+			//else echo $err['message'];
+			else echo '-';
+			echo '</td>'; 
+			
+			echo '</tr>';
+				
+		}
+		echo '</table>';
 	}
-	echo '</table>';
+	else 
+	{
+		$err = oci_error($c);
+		echo 'Oracle error '.$err['message'].'<br />';
+	}
 	error_reporting(E_ALL);
 }
 function show_all_messages($topic_id)
